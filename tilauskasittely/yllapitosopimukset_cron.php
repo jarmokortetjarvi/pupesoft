@@ -19,11 +19,29 @@
 	$kieli = $argv[2];
 	$kukarow['kuka']  = "crond";
 
-	// Haetaan yhtion tiedot (virhetsekki funktiossa....)
-	$yhtiorow = hae_yhtion_parametrit($kukarow['yhtio']);
+	$query    = "select * from yhtio where yhtio='$kukarow[yhtio]'";
+	$yhtiores = mysql_query($query) or pupe_error($query);
 
-	$cron_pvm = array();
-	$cron_tun = array();
+	if (mysql_num_rows($yhtiores) == 1) {
+		$yhtiorow = mysql_fetch_array($yhtiores);
+
+		// haetaan yhtiön parametrit
+		$query = "	SELECT *
+					FROM yhtion_parametrit
+					WHERE yhtio='$yhtiorow[yhtio]'";
+		$result = mysql_query($query) or die ("Kysely ei onnistu yhtio $query");
+
+		if (mysql_num_rows($result) == 1) {
+			$yhtion_parametritrow = mysql_fetch_array($result);
+			// lisätään kaikki yhtiorow arrayseen, niin ollaan taaksepäinyhteensopivia
+			foreach ($yhtion_parametritrow as $parametrit_nimi => $parametrit_arvo) {
+				$yhtiorow[$parametrit_nimi] = $parametrit_arvo;
+			}
+		}
+	}
+	else {
+		die ("Yhtiö $kukarow[yhtio] ei löydy!");
+	}
 
 	// ajetaan eka läpi niin saadaan laskuttamattomat sopparit muuttujiin
 	require ("yllapitosopimukset.php");

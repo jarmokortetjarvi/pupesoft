@@ -65,8 +65,12 @@ if ($laskun_summa_eur == 0) {
 $tuotetiedot = $xml->xpath('Group25');
 $i 			 = 0;
 $rtuoteno	 = array();
+<<<<<<< HEAD
 $ealvi		 = array("");
 $lisavat	 = array("");
+=======
+$ealvi		 = array();
+>>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 
 if (count($tuotetiedot) > 0) {
 	foreach ($tuotetiedot as $tuotetieto) {
@@ -83,10 +87,10 @@ if (count($tuotetiedot) > 0) {
 			$xvat[$i] = $tuotetieto->xpath('Group33/TAX[@eC241.5153="VAT"]/@eC243.5278');
 
 			if (is_array($xvat[$i])) {
-				$ealvi[$i] = $rtuoteno[$i]["alv"] = array_shift($xvat[$i]);
-			}
-			else {
-				$ealvi[$i] = $rtuoteno[$i]["alv"] = "";
+				 $xvati = (float) $xvat[$i][0]; // Näin voimme pohtia oliko täällä tuo segmentti
+
+				$rtuoteno[$i]["alv"] = $xvati;
+				$ealvi[] = $xvati;
 			}
 
 			$rtuoteno[$i]["riviinfo"] = array_shift($tuotetieto-> xpath('IMD/@eC273.7008.1'));
@@ -114,11 +118,15 @@ if (count($tuotetiedot) > 0) {
 
 // Verotiedot
 $vattiedot	= $xml->xpath('Group50');
+<<<<<<< HEAD
+=======
+$lisavat	= array();
+>>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 $i			= 0;
 
 if (count($vattiedot) > 0) {
 	foreach ($vattiedot as $vattieto) {
-		$lisavat[$i] = array_shift($vattieto->xpath('TAX/@eC243.5278'));
+		$lisavat[$i] = (float) array_shift($vattieto->xpath('TAX/@eC243.5278'));
 		$i++;
 	}
 }

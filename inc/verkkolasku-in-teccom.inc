@@ -160,8 +160,12 @@
 	$tuotetiedot	= $xml->InvoiceDetail;
 	$i				= 0;
 	$rtuoteno		= array();
+<<<<<<< HEAD
 	$ealvi		 	= array("");
 	$lisavat		= array("");
+=======
+	$ealvi		 	= array();
+>>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 	$aputuoteno		= "";
 	$pituus			= "";
 
@@ -218,7 +222,7 @@
 					$rtuoteno[$i]["hinta"] = $rtuoteno[$i]["rivihinta"]  / $rtuoteno[$i]["kpl"] ;
 				}
 
-				$ealvi[$i] = 0; // Oletetaan aina ALV 0%
+				$ealvi[] = 0; // Oletetaan aina ALV 0%
 				$rtuoteno[$i]["alv"] = 0; // Oletetaan aina ALV 0%
 				$rtuoteno[$i]["nimitys"] = utf8_decode($tuotetieto->ProductDescription->ProductName1);
 			}

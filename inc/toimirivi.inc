@@ -156,7 +156,7 @@
 					WHERE yhtio = '$kukarow[yhtio]'
 					and kaytossa != 'E'
 					and tyyppi = 'K'
-					ORDER BY koodi+0, koodi, nimi";
+					ORDER BY nimi";
 		$vresult = pupe_query($query);
 
 		$sel="";
@@ -184,7 +184,7 @@
 					WHERE yhtio = '$kukarow[yhtio]'
 					and tyyppi = 'O'
 					and kaytossa != 'E'
-					ORDER BY koodi+0, koodi, nimi";
+					ORDER BY nimi";
 		$vresult = pupe_query($query);
 
 		$sel="";
@@ -212,7 +212,7 @@
 					WHERE yhtio = '$kukarow[yhtio]'
 					and tyyppi = 'P'
 					and kaytossa != 'E'
-					ORDER BY koodi+0, koodi, nimi";
+					ORDER BY nimi";
 		$vresult = pupe_query($query);
 
 		$sel="";

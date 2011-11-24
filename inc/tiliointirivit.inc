@@ -30,8 +30,6 @@
 	if (!isset($kohde))		$kohde = "";
 	if (!isset($projekti))	$projekti = "";
 	if (!isset($summa_valuutassa))	$summa_valuutassa = "";
-	if (!isset($liitos)) 	$liitos = "";
-	if (!isset($liitostunnus)) $liitostunnus = 0;
 
 	echo "<br><br>";
 	echo "<table>";
@@ -69,7 +67,7 @@
 					WHERE yhtio = '$kukarow[yhtio]'
 					and tyyppi = 'K'
 					and kaytossa != 'E'
-					ORDER BY koodi+0, koodi, nimi";
+					ORDER BY nimi";
 		$result = pupe_query($query);
 
 		if (mysql_num_rows($result) > 0) {
@@ -90,7 +88,7 @@
 					WHERE yhtio = '$kukarow[yhtio]'
 					and tyyppi = 'O'
 					and kaytossa != 'E'
-					ORDER BY koodi+0, koodi, nimi";
+					ORDER BY nimi";
 		$result = pupe_query($query);
 
 		if (mysql_num_rows($result) > 0) {
@@ -111,7 +109,7 @@
 					WHERE yhtio = '$kukarow[yhtio]'
 					and tyyppi = 'P'
 					and kaytossa != 'E'
-					ORDER BY koodi+0, koodi, nimi";
+					ORDER BY nimi";
 		$result = pupe_query($query);
 
 		if (mysql_num_rows($result) > 0) {
@@ -140,8 +138,6 @@
 				<input type='hidden' name = 'kk' value = '$kk'>
 				<input type='hidden' name = 'iframe' value = '$iframe'>
 				<input type='hidden' name = 'iframe_id' value = '$iframe_id'>
-				<input type='hidden' name = 'liitos' value='{$liitos}' />
-				<input type='hidden' name = 'liitostunnus' value='{$liitostunnus}' />
 				<input type='hidden' name = 'jarj' value = '$jarj'>";
 
 		if ($tiliulos == '') {
@@ -204,29 +200,6 @@
 
 		echo "<td valign='top'>";
 		echo "<input type='text' name='selite' value = '$selite'>";
-
-		if ($trow['tila'] == 'X' and trim($liitos) != '' and $liitostunnus > 0) {
-
-			if ($liitos == "A") {
-				$taulu = "asiakas";
-			}
-			elseif ($liitos == "T") {
-				$taulu = "toimi";
-			}
-			else {
-				$taulu = "SQLERROR";
-			}
-
-			$query = "	SELECT nimi, nimitark
-						FROM {$taulu}
-						WHERE yhtio = '{$kukarow['yhtio']}'
-						AND tunnus = '{$liitostunnus}'";
-			$liitos_nimi_res = pupe_query($query);
-			$liitos_nimi_row = mysql_fetch_assoc($liitos_nimi_res);
-
-			echo "<br />",t(ucwords($taulu)),": {$liitos_nimi_row['nimi']} {$liitos_nimi_row['nimitark']}";
-		}
-
 		echo "</td>";
 
 		if ($viivatut == 'on') {
@@ -255,11 +228,6 @@
 		$lisa = " and tiliointi.korjattu = ''";
 	}
 
-	// tarkistetaan mikä tila otsikolla on
-	$query = "SELECT tila FROM lasku WHERE yhtio = '{$kukarow['yhtio']}' AND tunnus = '{$tunnus}'";
-	$tila_chk_res = pupe_query($query);
-	$tila_chk_row = mysql_fetch_assoc($tila_chk_res);
-
 	$query = "	SELECT *,
 				concat_ws(' / ', a.nimi, b.nimi, c.nimi) tarkenne,
 				tili.nimi tilinimi,
@@ -268,9 +236,7 @@
 				tiliointi.laadittu laadittu,
 				tiliointi.tunnus tunnus,
 				ifnull(la.nimi, tiliointi.laatija) laatija_nimi,
-				ifnull(ko.nimi, tiliointi.korjattu) korjattu_nimi,
-				tiliointi.liitos,
-				tiliointi.liitostunnus
+				ifnull(ko.nimi, tiliointi.korjattu) korjattu_nimi
 				FROM tiliointi
 				LEFT JOIN tili ON tili.yhtio = tiliointi.yhtio and tili.tilino = tiliointi.tilino
 				LEFT JOIN kustannuspaikka a ON a.yhtio = '$kukarow[yhtio]' and a.tunnus = tiliointi.kustp and a.tyyppi = 'K'
@@ -304,10 +270,10 @@
 		echo "<td valign='top' class='$class' align='right'>". (float) $trow["vero"]. "</td>";
 		echo "<td align='center' valign='top' class='$class'>".tv1dateconv($trow["tapvm"])."</td>";
 		echo "<td valign='top' class='$class'>$trow[selite]";
-
 		if ($trow["summa_valuutassa"] != 0 and $trow["valkoodi"] != "" and $trow["valkoodi"] != $yhtiorow["valkoodi"]) {
 			echo " ($trow[summa_valuutassa] $trow[valkoodi])";
 		}
+<<<<<<< HEAD
 
 		if ($tila_chk_row['tila'] == 'X' and $trow['liitos'] != '' and $trow['liitostunnus'] > 0) {
 
@@ -332,6 +298,8 @@
 
 		}
 
+=======
+>>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 		echo "</td>";
 
 		if ($viivatut == "on") {
@@ -443,8 +411,7 @@
 
 	$query = "	SELECT liitostunnus, tilaustyyppi
 				FROM lasku
-				WHERE yhtio = '$kukarow[yhtio]'
-				and tunnus = '$tunnus'";
+				WHERE yhtio = '$kukarow[yhtio]' and tunnus = '$tunnus'";
 	$lasres = pupe_query($query);
 	$mtklasrow = mysql_fetch_assoc($lasres);
 

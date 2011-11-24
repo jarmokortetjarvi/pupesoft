@@ -274,8 +274,13 @@ else {
 				WHERE yhtio = '$kukarow[yhtio]'
 				and kaytossa != 'E'
 				and tyyppi = 'K'
+<<<<<<< HEAD
 				ORDER BY koodi+0, koodi, nimi";
 	$vresult = pupe_query($query);
+=======
+				ORDER BY nimi";
+	$vresult = mysql_query($query) or pupe_error($query);
+>>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 
 	echo "<td><select name='kustp'><option value=' '>".t("Ei valintaa")."";
 
@@ -309,8 +314,13 @@ else {
 				WHERE yhtio = '$kukarow[yhtio]'
 				and kaytossa != 'E'
 				and tyyppi = 'O'
+<<<<<<< HEAD
 				ORDER BY koodi+0, koodi, nimi";
 	$vresult = pupe_query($query);
+=======
+				ORDER BY nimi";
+	$vresult = mysql_query($query) or pupe_error($query);
+>>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 
 	echo "<td><select name='kohde'><option value=' '>".t("Ei valintaa")."";
 
@@ -331,8 +341,13 @@ else {
 				WHERE yhtio = '$kukarow[yhtio]'
 				and kaytossa != 'E'
 				and tyyppi = 'P'
+<<<<<<< HEAD
 				ORDER BY koodi+0, koodi, nimi";
 	$vresult = pupe_query($query);
+=======
+				ORDER BY nimi";
+	$vresult = mysql_query($query) or pupe_error($query);
+>>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 
 	echo "<td><select name='proj'><option value=' '>".t("Ei valintaa")."";
 

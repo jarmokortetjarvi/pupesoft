@@ -1,5 +1,4 @@
 <?php
-
 	if (!isset($link)) require "inc/parametrit.inc";
 
 	enable_ajax();
@@ -23,22 +22,8 @@
 		}
 	}
 
-	if (!isset($tiliointirivit)) $tiliointirivit = array();
-	if (!isset($iliitos)) $iliitos = array();
-	if (!isset($ed_iliitos)) $ed_iliitos = array();
-	if (!isset($ed_iliitostunnus)) $ed_iliitostunnus = array();
-
-	if (isset($tullaan) and $tullaan == 'muutosite') {
-		$iliitos = unserialize(urldecode($iliitos));
-		$ed_iliitos = $iliitos;
-		$ed_iliitostunnus = unserialize(urldecode($ed_iliitostunnus));
-		$tiliointirivit = unserialize(urldecode($tiliointirivit));
-	}
-
-	if (isset($tiliointirivit) and !is_array($tiliointirivit)) $tiliointirivit = unserialize(urldecode($tiliointirivit));
-
 	if (isset($muutparametrit)) {
-		list($tee, $kuitti, $kuva, $maara, $tpp, $tpk, $tpv, $summa, $valkoodi, $alv_tili, $nimi, $comments, $selite, $liitos, $liitostunnus, $tunnus, $tiliointirivit, $MAX_FILE_SIZE, $itili, $ikustp, $ikohde, $isumma, $ivero, $iselite, $iliitos, $ed_iliitostunnus, $ed_iliitos) = explode("#!#", $muutparametrit);
+		list($tee, $kuitti, $kuva, $maara, $tpp, $tpk, $tpv, $summa, $valkoodi, $alv_tili, $nimi, $comments, $selite, $MAX_FILE_SIZE, $itili, $ikustp, $ikohde, $isumma, $ivero, $iselite) = explode("#!#", $muutparametrit);
 
 		$itili		= unserialize(urldecode($itili));
 		$ikustp		= unserialize(urldecode($ikustp));
@@ -46,62 +31,9 @@
 		$isumma		= unserialize(urldecode($isumma));
 		$ivero		= unserialize(urldecode($ivero));
 		$iselite	= unserialize(urldecode($iselite));
-		$iliitos 	= unserialize(urldecode($iliitos));
-		$ed_iliitostunnus = unserialize(urldecode($ed_iliitostunnus));
-		$ed_iliitos = unserialize(urldecode($ed_iliitos));
-		$tiliointirivit = unserialize(urldecode($tiliointirivit));
 	}
 
-	if ($toimittajaid > 0) {
-
-		for ($i = 1; $i <= count($iliitos); $i++) {
-
-			if ($iliitos[$i] == 'T' and $iliitostunnus[$i] == $toimittajaid) {
-				$ed_iliitostunnus[$i] = $toimittajaid;
-				$ed_iliitos[$i] = 'T';
-			}
-			elseif ($iliitos[$i] == 'T' and isset($iliitostunnus) and !isset($iliitostunnus[$i]) and $ed_iliitostunnus[$i] == $toimittajaid) {
-				$ed_iliitostunnus[$i] = '';
-				$ed_iliitos[$i] = '';
-			}
-		}
-	}
-	elseif ($asiakasid > 0) {
-
-		for ($i = 1; $i <= count($iliitos); $i++) {
-
-			if ($iliitos[$i] == 'A' and $iliitostunnus[$i] == $asiakasid) {
-				$ed_iliitostunnus[$i] = $asiakasid;
-				$ed_iliitos[$i] = 'A';
-			}
-			elseif ($iliitos[$i] == 'A' and isset($iliitostunnus) and !isset($iliitostunnus[$i]) and $ed_iliitostunnus[$i] == $asiakasid) {
-				$ed_iliitostunnus[$i] = '';
-				$ed_iliitos[$i] = '';
-			}
-		}
-	}
-
-	$muutparametrit = $tee."#!#".$kuitti."#!#".$kuva."#!#".$maara."#!#".$tpp."#!#".$tpk."#!#".$tpv."#!#".$summa."#!#".$valkoodi."#!#".$alv_tili."#!#".$nimi."#!#".$comments."#!#".$selite."#!#".$liitos."#!#".$liitostunnus."#!#".$tunnus."#!#".urlencode(serialize($tiliointirivit))."#!#".$MAX_FILE_SIZE."#!#".urlencode(serialize($itili))."#!#".urlencode(serialize($ikustp))."#!#".urlencode(serialize($ikohde))."#!#".urlencode(serialize($isumma))."#!#".urlencode(serialize($ivero))."#!#".urlencode(serialize($iselite))."#!#".urlencode(serialize($iliitos))."#!#".urlencode(serialize($ed_iliitostunnus))."#!#".urlencode(serialize($ed_iliitos));
-
-	echo "<script type='text/javascript' language='javascript'>";
-	require_once("inc/jquery.min.js");
-	echo "</script>";
-
-	echo "<script type=\"text/javascript\" charset=\"utf-8\">
-
-		$(document).ready(function(){
-			$('#liitosbox_checkall').click(function() {
-
-				if ($(this).is(':checked')) {
-					$('.liitosbox').attr('checked', 'checked');
-				}
-				else {
-					$('.liitosbox').attr('checked', '');
-				}
-			});
-		});
-		</script>";
-
+	$muutparametrit = $tee."#!#".$kuitti."#!#".$kuva."#!#".$maara."#!#".$tpp."#!#".$tpk."#!#".$tpv."#!#".$summa."#!#".$valkoodi."#!#".$alv_tili."#!#".$nimi."#!#".$comments."#!#".$selite."#!#".$MAX_FILE_SIZE."#!#".urlencode(serialize($itili))."#!#".urlencode(serialize($ikustp))."#!#".urlencode(serialize($ikohde))."#!#".urlencode(serialize($isumma))."#!#".urlencode(serialize($ivero))."#!#".urlencode(serialize($iselite));
 
 	echo "<font class='head'>".t("Uusi muu tosite")."</font><hr>\n";
 
@@ -129,11 +61,6 @@
 		if ($monta == 0) {
 			$tee = "N";
 		}
-		elseif ($toimittajaid == 0) {
-			require ("inc/footer.inc");
-			exit;
-		}
-
 	}
 
 	if ($asiakas_y != '') {
@@ -150,36 +77,31 @@
 		if ($monta == 0) {
 			$tee = "N";
 		}
-		elseif ($asiakasid == 0) {
-			require ("inc/footer.inc");
-			exit;
-		}
 	}
 
 	if ($toimittajaid > 0) {
 
-		$query = "SELECT * FROM toimi WHERE tunnus = '{$toimittajaid}'";
-		$result = pupe_query($query);
+		$query = "SELECT * FROM toimi WHERE tunnus = '$toimittajaid'";
+		$result = mysql_query($query) or pupe_error($query);
 
 		if (mysql_num_rows($result) != 1) {
-			echo t("Toimittajaa")." {$ytunnus} ".t("ei löytynytkään")."!";
+			echo t("Toimittajaa")." $ytunnus ".t("ei löytynytkään")."!";
 			exit;
 		}
 
-		$toimrow = mysql_fetch_assoc($result);
+		$toimasrow = mysql_fetch_assoc($result);
 	}
+	elseif ($asiakasid > 0) {
 
-	if ($asiakasid > 0) {
-
-		$query = "SELECT * FROM asiakas WHERE tunnus = '{$asiakasid}'";
-		$result = pupe_query($query);
+		$query = "SELECT * FROM asiakas WHERE tunnus = '$asiakasid'";
+		$result = mysql_query($query) or pupe_error($query);
 
 		if (mysql_num_rows($result) != 1) {
-			echo t("Asiakasta")." {$ytunnus} ".t("ei löytynytkään")."!";
+			echo t("Asiakasta")." $ytunnus ".t("ei löytynytkään")."!";
 			exit;
 		}
 
-		$asrow = mysql_fetch_assoc($result);
+		$toimasrow = mysql_fetch_assoc($result);
 	}
 
 	// Tarkistetetaan syötteet perustusta varten
@@ -207,12 +129,12 @@
 			// koitetaan hakea maksupäivän kurssi
 			$query = "	SELECT *
 						FROM valuu_historia
-						WHERE kotivaluutta = '{$yhtiorow['valkoodi']}'
-						AND valuutta = '{$valkoodi}'
-						AND kurssipvm <= '{$tpv}-{$tpk}-{$tpp}'
+						WHERE kotivaluutta = '$yhtiorow[valkoodi]'
+						AND valuutta = '$valkoodi'
+						AND kurssipvm <= '$tpv-$tpk-$tpp'
 						ORDER BY kurssipvm DESC
 						LIMIT 1";
-			$valuures = pupe_query($query);
+			$valuures = mysql_query($query) or pupe_error($query);
 
 			if (mysql_num_rows($valuures) == 1) {
 				$valuurow = mysql_fetch_assoc($valuures);
@@ -257,9 +179,6 @@
 				/** Laitetaan solut arrayseen **/
 				$excelrivi = array();
 
-				/** Aktivoidaan eka sheetti**/
-				$objPHPExcel->setActiveSheetIndex(0);
-
 				/** Loopataan rivit/sarakkeet **/
 				foreach ($objPHPExcel->getActiveSheet()->getRowIterator() as $row) {
 				    $cellIterator = $row->getCellIterator();
@@ -290,11 +209,11 @@
 							if ($ikustp_tsk != "") {
 								$query = "	SELECT tunnus
 											FROM kustannuspaikka
-											WHERE yhtio = '{$kukarow['yhtio']}'
+											WHERE yhtio = '$kukarow[yhtio]'
 											and tyyppi = 'K'
 											and kaytossa != 'E'
-											and nimi = '{$ikustp_tsk}'";
-								$ikustpres = pupe_query($query);
+											and nimi = '$ikustp_tsk'";
+								$ikustpres = mysql_query($query) or pupe_error($query);
 
 								if (mysql_num_rows($ikustpres) == 1) {
 									$ikustprow = mysql_fetch_assoc($ikustpres);
@@ -305,11 +224,11 @@
 							if ($ikustp_tsk != "" and $ikustp[$maara] == 0) {
 								$query = "	SELECT tunnus
 											FROM kustannuspaikka
-											WHERE yhtio = '{$kukarow['yhtio']}'
+											WHERE yhtio = '$kukarow[yhtio]'
 											and tyyppi = 'K'
 											and kaytossa != 'E'
-											and koodi = '{$ikustp_tsk}'";
-								$ikustpres = pupe_query($query);
+											and koodi = '$ikustp_tsk'";
+								$ikustpres = mysql_query($query) or pupe_error($query);
 
 								if (mysql_num_rows($ikustpres) == 1) {
 									$ikustprow = mysql_fetch_assoc($ikustpres);
@@ -323,11 +242,11 @@
 
 								$query = "	SELECT tunnus
 											FROM kustannuspaikka
-											WHERE yhtio = '{$kukarow['yhtio']}'
+											WHERE yhtio = '$kukarow[yhtio]'
 											and tyyppi = 'K'
 											and kaytossa != 'E'
-											and tunnus = '{$ikustp_tsk}'";
-								$ikustpres = pupe_query($query);
+											and tunnus = '$ikustp_tsk'";
+								$ikustpres = mysql_query($query) or pupe_error($query);
 
 								if (mysql_num_rows($ikustpres) == 1) {
 									$ikustprow = mysql_fetch_assoc($ikustpres);
@@ -335,14 +254,15 @@
 								}
 							}
 						}
+<<<<<<< HEAD
 						elseif(strtolower($otsikot[$e]) == "summa") {
 							${"i".strtolower($otsikot[$e])}[$maara] = sprintf("%.2f",round($eriv, 2));
 						}
+=======
+>>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 						else {
-
 							${"i".strtolower($otsikot[$e])}[$maara] = $eriv;
 						}
-
 					}
 
 					$maara++;
@@ -437,11 +357,8 @@
 				$kohde_tark		= $ikohde[$i];
 				$projekti_tark	= $iprojekti[$i];
 
-				if (isset($toimittajaid) and $toimittajaid > 0) {
-					$tositeliit = $toimrow["tunnus"];
-				}
-				elseif (isset($asiakasid) and $asiakasid > 0) {
-					$tositeliit = $asrow['tunnus'];
+				if ((isset($toimittajaid) and $toimittajaid > 0) or (isset($asiakasid) and $asiakasid > 0)) {
+					$tositeliit = $toimasrow["tunnus"];
 				}
 				else {
 					$tositeliit = 0;
@@ -488,7 +405,7 @@
 				$kuittivirhe = "<font class='error'>".t("Pyysit kuittia, mutta kassatilille ei ole vientejä")."</font><br>\n";
 			}
 
-			if ($nimi == '' and $toimrow["nimi"] == '' and $asrow['nimi'] == '') {
+			if ($nimi == '' and $toimasrow["nimi"] == '') {
 				$gok = 1;
 				$kuittivirhe .= "<font class='error'>".t("Kuitille on annettava nimi tai asiakas tai toimittaja")."</font><br>\n";
 			}
@@ -524,68 +441,51 @@
 	// Kirjoitetaan tosite jos tiedot ok!
 	if ($tee == 'I' and isset($teetosite)) {
 
-		if (trim($nimi) != '') {
-			$qlisa = " nimi = '{$nimi}',";
-		}
-
-		$paivitetaanko = false;
-
-		if (isset($tunnus) and trim($tunnus) > 0) {
-
-			$tunnus = (int) $tunnus;
-
-			$query = "	UPDATE lasku SET
-						tapvm = '{$tpv}-{$tpk}-{$tpp}',
-						{$qlisa}
-						alv_tili = '{$alv_tili}',
-						comments = '{$comments}'
-						WHERE yhtio = '{$kukarow['yhtio']}'
-						AND tunnus = '{$tunnus}'";
-			$result = pupe_query($query);
-
-			$paivitetaanko = true;
-
-			$maara = count($ed_iliitostunnus)+1;
+		if ($toimittajaid > 0 or $asiakasid > 0) {
+			$qlisa = "	ytunnus 		= '$toimasrow[ytunnus]',
+						nimi 			= '$toimasrow[nimi]',
+						nimitark 		= '$toimasrow[nimitark]',
+						osoite 			= '$toimasrow[osoite]',
+						osoitetark 		= '$toimasrow[osoitetark]',
+						postino 		= '$toimasrow[postino]',
+						postitp 		= '$toimasrow[postitp]',
+						maa 			= '$toimasrow[maa]',
+						liitostunnus	= '$toimasrow[tunnus]',";
 		}
 		else {
-			$query = "	INSERT into lasku set
-						yhtio 		= '{$kukarow['yhtio']}',
-						tapvm 		= '{$tpv}-{$tpk}-{$tpp}',
-						{$qlisa}
-						tila 		= 'X',
-						alv_tili 	= '{$alv_tili}',
-						comments	= '{$comments}',
-						laatija 	= '{$kukarow['kuka']}',
-						luontiaika 	= now()";
-			$result = pupe_query($query);
-			$tunnus = mysql_insert_id ($link);
+			$qlisa = "	nimi			= '$nimi',";
 		}
+
+
+		$query = "	INSERT into lasku set
+					yhtio 		= '$kukarow[yhtio]',
+					tapvm 		= '$tpv-$tpk-$tpp',
+					$qlisa
+					tila 		= 'X',
+					alv_tili 	= '$alv_tili',
+					comments	= '$comments',
+					laatija 	= '$kukarow[kuka]',
+					luontiaika 	= now()";
+		$result = mysql_query($query) or pupe_error($query);
+		$tunnus = mysql_insert_id ($link);
 
 		if (isset($avaavatase) and $avaavatase == 'joo') {
 			$query = "	UPDATE tilikaudet SET
-						avaava_tase = '{$tunnus}'
+						avaava_tase = '$tunnus'
 						WHERE yhtio = '{$kukarow['yhtio']}'
 						AND tunnus = '{$tilikausi}'";
-			$avaavatase_result = pupe_query($query);
+			$avaavatase_result = mysql_query($query) or pupe_error($query);
 		}
 
 		if ($kuva) {
 			// päivitetään kuvalle vielä linkki toiseensuuntaa
-			$query = "	UPDATE liitetiedostot
-						set liitostunnus = '{$tunnus}', selite = '{$selite} {$summa}'
-						where tunnus = '{$kuva}'";
-			$result = pupe_query($query);
-		}
-
-		foreach ($ed_iliitostunnus as $liit_indx => $liit) {
-			$iliitostunnus[$liit_indx] = $liit;
-			$iliitos[$liit_indx] = $ed_iliitos[$liit_indx];
+			$query = "UPDATE liitetiedostot set liitostunnus='$tunnus', selite='$selite $summa' where tunnus='$kuva'";
+			$result = mysql_query($query) or pupe_error($query);
 		}
 
 		// Tehdään tiliöinnit
 		for ($i=1; $i<$maara; $i++) {
 			if (strlen($itili[$i]) > 0) {
-
 				$tili				= $itili[$i];
 				$kustp				= $ikustp[$i];
 				$kohde				= $ikohde[$i];
@@ -595,8 +495,6 @@
 				$selite 			= $iselite[$i];
 				$summa_valuutassa	= $isumma_valuutassa[$i];
 				$valkoodi 			= $valkoodi;
-				$liitos				= mysql_real_escape_string($iliitos[$i]);
-				$liitostunnus		= mysql_real_escape_string($iliitostunnus[$i]);
 
 				require("inc/teetiliointi.inc");
 
@@ -608,57 +506,27 @@
 				$ivero[$i]				= '';
 				$iselite[$i]			= '';
 				$isumma_valuutassa[$i]	= '';
-				$iliitos[$i]			= '';
-				$iliitostunnus[$i]		= '';
 			}
 		}
+		if ($kuitti != '') require("inc/kuitti.inc");
 
-		if ($kuitti != '') {
-			require("inc/kuitti.inc");
-		}
+		$tee		= "";
+		$selite		= "";
+		$fnimi		= "";
+		$summa		= "";
+		$nimi		= "";
+		$kuitti		= "";
+		$kuva 		= "";
+		$turvasumma_valuutassa = "";
+		$valkoodi 	= "";
 
-		$alv_tili = "";
-		$asiakas_y = "";
-		$comments = "";
-		$ed_iliitos = "";
-		$ed_iliitostunnus = "";
-		$ikohde = "";
-		$ikustp = "";
-		$iliitos = "";
-		$iprojekti = "";
-		$iselite = "";
-		$isumma = "";
-		$itili = "";
-		$ivero = "";
-		$maara = "";
-		$nimi = "";
-		$selite = "";
-		$summa = "";
-		$tee = "";
-		$teetosite = "";
-		$tiliointirivit = "";
-		$toimittaja_y = "";
-		$tositesum = "";
-		$tpk = "";
-		$tpp = "";
-		$tpv = "";
-		$valkoodi = "";
+		echo "<font class='message'>".t("Tosite luotu")."!</font>\n";
 
-		if ($lopetus != '' and $tullaan == "muutosite") {
-			lopetus($lopetus, "META");
-			exit;
-		}
-		else {
-			echo "<font class='message'>".t("Tosite luotu")."!</font>\n";
-			echo "	<form action = 'muutosite.php' method='post'>
-					<input type='hidden' name='tee' value='E'>
-					<input type='hidden' name='tunnus' value='{$tunnus}'>
-					<input type='Submit' value='".t("Näytä tosite")."'>
-					</form><br><hr><br>";
-		}
-
-		$tullaan = "";
-		$tunnus = "";
+		echo "	<form action = 'muutosite.php' method='post'>
+				<input type='hidden' name='tee' value='E'>
+				<input type='hidden' name='tunnus' value='$tunnus'>
+				<input type='Submit' value='".t("Näytä tosite")."'>
+				</form><br><hr><br>";
 	}
 	else {
 		$tee = "";
@@ -734,16 +602,16 @@
 					var dateTallaHet = new Date();
 					var ero = (dateTallaHet.getTime() - dateSyotetty.getTime()) / 86400000;
 
-					var tilalkpp = {$tilalkpp};
-					var tilalkkk = {$tilalkkk};
-					var tilalkvv = {$tilalkvv};
+					var tilalkpp = $tilalkpp;
+					var tilalkkk = $tilalkkk;
+					var tilalkvv = $tilalkvv;
 					var dateTiliAlku = new Date(tilalkvv,tilalkkk,tilalkpp);
 					dateTiliAlku = dateTiliAlku.getTime();
 
 
-					var tilloppp = {$tilloppp};
-					var tillopkk = {$tillopkk};
-					var tillopvv = {$tillopvv};
+					var tilloppp = $tilloppp;
+					var tillopkk = $tillopkk;
+					var tillopvv = $tillopvv;
 					var dateTiliLoppu = new Date(tillopvv,tillopkk,tilloppp);
 					dateTiliLoppu = dateTiliLoppu.getTime();
 
@@ -793,22 +661,11 @@
 		echo "<font class='head'>".t("Tositteen otsikkotiedot").":</font>\n";
 
 		echo "<form name='tosite' action='tosite.php' method='post' enctype='multipart/form-data' onSubmit = 'return verify()' autocomplete='off'>\n";
-		echo "<input type='hidden' name='lopetus' value='$lopetus'>\n";
 		echo "<input type='hidden' name='tee' value='I'>\n";
-
-		echo "<input type='hidden' name='tiliointirivit' value='",urlencode(serialize($tiliointirivit)),"' />";
-		echo "<input type='hidden' name='tunnus' value='{$tunnus}' />";
-
-		if (isset($tullaan) and $tullaan == 'muutosite' and ((!isset($toimittajaid) and !isset($asiakasid)) or ($toimittajaid == 0 and $asiakasid == 0))) {
-			echo "<input type='hidden' name='ed_iliitostunnus' value='",urlencode(serialize($ed_iliitostunnus)),"' />";
-			echo "<input type='hidden' name='ed_iliitos' value='",urlencode(serialize($ed_iliitos)),"' />";
-			echo "<input type='hidden' name='iliitos' value='",urlencode(serialize($iliitos)),"' />";
-			echo "<input type='hidden' name='tullaan' value='{$tullaan}' />";
-		}
 
 		if ((isset($gokfrom) and $gokfrom == 'avaavatase') or (isset($tilikausi) and is_numeric($tilikausi))) {
 			echo "<input type='hidden' name='avaavatase' value='joo' />";
-			echo "<input type='hidden' name='tilikausi' value='{$tilikausi}' />";
+			echo "<input type='hidden' name='tilikausi' value='$tilikausi' />";
 		}
 
 		// Uusi tosite
@@ -825,49 +682,6 @@
 			}
 		}
 
-		if (isset($tunnus) and $tunnus > 0 and count($tiliointirivit) > 0) {
-
-			$query = "SELECT * FROM lasku WHERE yhtio = '{$kukarow['yhtio']}' AND tila = 'X' and tunnus = '{$tunnus}'";
-			$lasku_chk_res = pupe_query($query);
-			$lasku_chk_row = mysql_fetch_assoc($lasku_chk_res);
-
-			$comments = $lasku_chk_row['comments'];
-
-			$itili = $ikustp = $ikohde = $iprojekti = $isumma = $isumma_valuutassa = $ivero = $iselite = array();
-
-			$skipattuja = 0;
-
-			foreach ($tiliointirivit as $xxx => $rivix) {
-
-				$query = "SELECT * FROM tiliointi WHERE yhtio = '{$kukarow['yhtio']}' AND ltunnus = '{$tunnus}' AND tunnus = '{$rivix}'";
-				$info_res = pupe_query($query);
-				$info_row = mysql_fetch_assoc($info_res);
-
-				if ($info_row['korjattu'] != '') {
-					$skipattuja++;
-					continue;
-				}
-
-				$xxx -= $skipattuja;
-
-				$itili[$xxx] = $info_row['tilino'];
-				$ikustp[$xxx] = $info_row['kustp'];
-				$ikohde[$xxx] = $info_row['kohde'];
-				$iprojekti[$xxx] = $info_row['projekti'];
-				$isumma[$xxx] = $info_row['summa'];
-				$isumma_valuutassa[$xxx] = $info_row['summa_valuutassa'];
-				$ivero[$xxx] = $info_row['vero'];
-				$iselite[$xxx] = $info_row['selite'];
-			}
-
-			$maara = (!isset($maara) or $maara < (count($tiliointirivit) + 1 - $skipattuja)) ? count($tiliointirivit) + 1 - $skipattuja : $maara;
-
-			if (!in_array($maara, $tilmaarat)) {
-				$tilmaarat[] = $maara;
-				sort($tilmaarat);
-			}
-		}
-
 		$sel = array();
 		$sel[$maara] = "selected";
 
@@ -878,46 +692,52 @@
 			<select name='maara' onchange='submit();'>";
 
 		foreach ($tilmaarat as $tilmaara) {
-			echo "<option {$sel[$tilmaara]} value='{$tilmaara}'>".($tilmaara-1)."</option>";
+			echo "<option ".$sel[$tilmaara]." value='$tilmaara'>".($tilmaara-1)."</option>";
 		}
 
 		echo "</select></td>";
 
-		echo "<th nowrap>".t("Valitse toimittaja")."</th>";
+		echo "<th nowrap>".t("Liitä toimittaja")."</th>";
 		echo "<td>";
 
-		echo "<input type = 'text' name = 'toimittaja_y' size='20'></td><td class='back'><input type = 'submit' value = '".t("Etsi")."'>";
+		if ($toimittajaid > 0) {
+			echo "<input type='hidden' name='toimittajaid' value='$toimittajaid'>$toimasrow[ytunnus] $toimasrow[nimi]\n";
+		}
+		else {
+			echo "<input type = 'text' name = 'toimittaja_y' size='20'></td><td class='back'><input type = 'submit' value = '".t("Etsi")."'>";
+		}
 
 		echo "</td>\n";
 		echo "</tr>\n";
 
-		$tpp = !isset($tpp) ? date('d') : $tpp;
-		$tpk = !isset($tpk) ? date('m') : $tpk;
-		$tpv = !isset($tpv) ? date('Y') : $tpv;
-
 		echo "<tr>\n";
 		echo "<th>".t("Tositteen päiväys")."</th>\n";
-		echo "<td><input type='text' name='tpp' maxlength='2' size='2' value='{$tpp}'>\n";
-		echo "<input type='text' name='tpk' maxlength='2' size='2' value='{$tpk}'>\n";
-		echo "<input type='text' name='tpv' maxlength='4' size='4' value='{$tpv}'> ".t("ppkkvvvv")." {$tapvmvirhe}</td>\n";
+		echo "<td><input type='text' name='tpp' maxlength='2' size='2' value='$tpp'>\n";
+		echo "<input type='text' name='tpk' maxlength='2' size='2' value='$tpk'>\n";
+		echo "<input type='text' name='tpv' maxlength='4' size='4' value='$tpv'> ".t("ppkkvvvv")." $tapvmvirhe</td>\n";
 
-		echo "<th nowrap>".t("tai")." ".t("valitse asiakas")."</th>";
+		echo "<th nowrap>".t("tai")." ".t("Liitä asiakas")."</th>";
 		echo "<td>";
 
-		echo "<input type = 'text' name = 'asiakas_y' size='20'></td><td class='back'><input type = 'submit' value = '".t("Etsi")."'>";
+		if ($asiakasid > 0) {
+			echo "<input type='hidden' name='asiakasid' value='$asiakasid'>$toimasrow[ytunnus] $toimasrow[nimi] $toimasrow[nimitark]<br>$toimasrow[toim_ovttunnus] $toimasrow[toim_nimi] $toimasrow[toim_nimitark] $toimasrow[toim_postitp]\n";
+		}
+		else {
+			echo "<input type = 'text' name = 'asiakas_y' size='20'></td><td class='back'><input type = 'submit' value = '".t("Etsi")."'>";
+		}
 
 		echo "</td>\n";
 		echo "</tr>\n";
 
 		if (!isset($turvasumma_valuutassa)) $turvasumma_valuutassa = $summa;
 
-		echo "<tr><th>".t("Summa")."</th><td><input type='text' name='summa' value='{$turvasumma_valuutassa}' onchange='javascript:tositesumma();' onkeyup='javascript:tositesumma();'>\n";
+		echo "<tr><th>".t("Summa")."</th><td><input type='text' name='summa' value='$turvasumma_valuutassa' onchange='javascript:tositesumma();' onkeyup='javascript:tositesumma();'>\n";
 
 		$query = "	SELECT nimi, tunnus
 					FROM valuu
-					WHERE yhtio = '{$kukarow['yhtio']}'
+					WHERE yhtio = '$kukarow[yhtio]'
 					ORDER BY jarjestys";
-		$vresult = pupe_query($query);
+		$vresult = mysql_query($query) or pupe_error($query);
 
 		echo " <select name='valkoodi'>\n";
 
@@ -926,18 +746,18 @@
 			if (($vrow['nimi'] == $yhtiorow["valkoodi"] and $valkoodi == "") or ($vrow["nimi"] == $valkoodi)) {
 				$sel = "selected";
 			}
-			echo "<option value='{$vrow['nimi']}' {$sel}>{$vrow['nimi']}</option>\n";
+			echo "<option value='$vrow[nimi]' $sel>$vrow[nimi]</option>\n";
 		}
 
 		echo "</select>\n";
 		echo "</td>\n";
-		echo "<th>".t("tai")." ".t("Syötä nimi")."</th><td><input type='text' size='20' name='nimi' value='{$nimi}'></td></tr>\n";
+		echo "<th>".t("tai")." ".t("Syötä nimi")."</th><td><input type='text' size='20' name='nimi' value='$nimi'></td></tr>\n";
 
 
 		echo "<tr><th>".t("Tositteen kuva/liite")."</th>\n";
 
 		if (strlen($kuva) > 0) {
-			echo "<td>".t("Kuva jo tallessa")."!<input name='kuva' type='hidden' value = '{$kuva}'></td>\n";
+			echo "<td>".t("Kuva jo tallessa")."!<input name='kuva' type='hidden' value = '$kuva'></td>\n";
 		}
 		else {
 			echo "<td><input type='hidden' name='MAX_FILE_SIZE' value='8000000'><input name='userfile' type='file'></td>\n";
@@ -951,22 +771,22 @@
 				$kuitti = 'checked';
 			}
 
-			echo "<input type='checkbox' name='kuitti' {$kuitti}>\n";
+			echo "<input type='checkbox' name='kuitti' $kuitti>\n";
 		}
 		else {
 			echo "<font class='message'>".t("Sinulla ei ole oletuskirjoitinta. Et voi tulostaa kuitteja")."!</font>\n";
 		}
 
-		echo " {$kuittivirhe}</td></tr>\n";
+		echo " $kuittivirhe</td></tr>\n";
 
 		// tutkitaan ollaanko jossain toimipaikassa alv-rekisteröity
 		$query = "	SELECT *
 					FROM yhtion_toimipaikat
-					WHERE yhtio = '{$kukarow['yhtio']}'
+					WHERE yhtio = '$kukarow[yhtio]'
 					and maa != ''
 					and vat_numero != ''
 					and toim_alv != ''";
-		$alhire = pupe_query($query);
+		$alhire = mysql_query($query) or pupe_error($query);
 
 		// ollaan alv-rekisteröity
 		if (mysql_num_rows($alhire) >= 1) {
@@ -974,14 +794,14 @@
 			echo "<tr>\n";
 			echo "<th>".t("Alv tili")."</th><td colspan='3'>\n";
 			echo "<select name='alv_tili'>\n";
-			echo "<option value='{$yhtiorow['alv']}'>{$yhtiorow['alv']} - {$yhtiorow['nimi']}, {$yhtiorow['kotipaikka']}, {$yhtiorow['maa']}</option>\n";
+			echo "<option value='$yhtiorow[alv]'>$yhtiorow[alv] - $yhtiorow[nimi], $yhtiorow[kotipaikka], $yhtiorow[maa]</option>\n";
 
 			while ($vrow = mysql_fetch_assoc($alhire)) {
 				$sel = "";
 				if ($alv_tili == $vrow['toim_alv']) {
 					$sel = "selected";
 				}
-				echo "<option value='{$vrow['toim_alv']}' {$sel}>{$vrow['toim_alv']} - {$vrow['nimi']}, {$vrow['kotipaikka']}, {$vrow['maa']}</option>\n";
+				echo "<option value='$vrow[toim_alv]' $sel>$vrow[toim_alv] - $vrow[nimi], $vrow[kotipaikka], $vrow[maa]</option>\n";
 			}
 
 			echo "</select>\n";
@@ -990,46 +810,29 @@
 		}
 		else {
 			$tilino_alv = $yhtiorow["alv"];
-			echo "<input type='hidden' name='alv_tili' value='{$tilino_alv}'>\n";
+			echo "<input type='hidden' name='alv_tili' value='$tilino_alv'>\n";
 		}
 
 		echo "<tr>\n";
 		echo "<th>".t("Tositteen kommentti")."</th>\n";
-		echo "<td colspan='3'><input type='text' name='comments' value='{$comments}' size='60'></td>\n";
+		echo "<td colspan='3'><input type='text' name='comments' value='$comments' size='60'></td>\n";
 		echo "</tr>\n";
 
 		echo "<tr>\n";
 		echo "<th>".t("Tiliöintien selitteet")."</th>\n";
-		echo "<td colspan='3'><input type='text' name='selite' value='{$selite}' maxlength='150' size='60' onchange='javascript:selitejs();' onkeyup='javascript:selitejs();'></td>\n";
+		echo "<td colspan='3'><input type='text' name='selite' value='$selite' maxlength='150' size='60' onchange='javascript:selitejs();' onkeyup='javascript:selitejs();'></td>\n";
 		echo "</tr>\n";
-
-		echo "<tr>
-				<th>".t("Lue tositteen rivit tiedostosta")."</th>
-				<td colspan='3'><input type='file' name='tositefile' onchage='submit()'></td>
-				</tr>\n";
-
-		if ($asiakasid > 0 or $toimittajaid > 0) {
-			echo "<tr>\n";
-			echo "<td colspan='4' class='back'><br></td>\n";
-			echo "</tr>\n";
-
-			if ($asiakasid > 0) {
-				echo "<tr>\n";
-				echo "<th>".t("Valittu asiakas")."</th>\n";
-				echo "<td colspan='2'><input type='hidden' name='asiakasid' value='{$asiakasid}'>{$asrow['ytunnus']} {$asrow['nimi']} {$asrow['nimitark']}<br>{$asrow['toim_ovttunnus']} {$asrow['toim_nimi']} {$asrow['toim_nimitark']} {$asrow['toim_postitp']}</td>\n";
-				echo "<td>".t("Liitä valittu asiakas kaikkiin tiliöinteihin").": <input type='checkbox' id='liitosbox_checkall'/></td>";
-				echo "</tr>\n";
-			}
-			if ($toimittajaid > 0) {
-				echo "<tr>\n";
-				echo "<th>".t("Valittu toimittaja")."</th>\n";
-				echo "<td colspan='2'><input type='hidden' name='toimittajaid' value='{$toimittajaid}'>{$toimrow['ytunnus']} {$toimrow['nimi']}</td>\n";
-				echo "<td>".t("Liitä valittu toimittaja kaikkiin tiliöinteihin").": <input type='checkbox' id='liitosbox_checkall'/></td>";
-				echo "</tr>\n";
-			}
-		}
-
 		echo "</table>\n";
+
+		echo "<br><font class='head'>".t("Lue tositteen rivit tiedostosta").":</font>\n";
+
+		echo "<table>
+				<tr>
+					<th>".t("Valitse tiedosto")."</th>
+					<td><input type='file' name='tositefile' onchage='submit()'></td>
+				</tr>
+			</table>";
+
 		echo "<br><font class='head'>".t("Syötä tositteen rivit").":</font>\n";
 
 		echo "<table>\n";
@@ -1042,15 +845,6 @@
 				echo "<th>".t("Tarkenne")."</th>\n";
 				echo "<th>".t("Summa")."</th>\n";
 				echo "<th>".t("Vero")."</th>\n";
-				echo "<th>",t("Liitos"),"</th>";
-
-				if ($asiakasid > 0) {
-					echo "<th>",t("Liitä valittu asiakas"),"</th>";
-				}
-				if ($toimittajaid > 0) {
-					echo "<th>",t("Liitä valittu toimittaja"),"</th>";
-				}
-
 				echo "</tr>\n";
 			}
 
@@ -1063,87 +857,87 @@
 				if (isset($itili[$i]) and $itili[$i] != '') {
 					$query = "	SELECT nimi
 								FROM tili
-								WHERE yhtio = '{$kukarow['yhtio']}' and tilino = '{$itili[$i]}'";
-					$vresult = pupe_query($query);
+								WHERE yhtio = '$kukarow[yhtio]' and tilino = '$itili[$i]'";
+					$vresult = mysql_query($query) or pupe_error($query);
 
 					if (mysql_num_rows($vresult) == 1) {
 						$vrow = mysql_fetch_assoc($vresult);
 						$tilinimi = $vrow['nimi'];
 					}
 				}
-				echo "<td width='200' valign='top'>".livesearch_kentta("tosite", "TILIHAKU", "itili[$i]", 170, $itili[$i], "EISUBMIT")." {$tilinimi}</td>\n";
+				echo "<td width='200' valign='top'>".livesearch_kentta("tosite", "TILIHAKU", "itili[$i]", 170, $itili[$i], "EISUBMIT")." $tilinimi</td>\n";
 			}
 			else {
-				echo "<td width='200' valign='top'>{$iulos[$i]}</td>\n";
+				echo "<td width='200' valign='top'>$iulos[$i]</td>\n";
 			}
 
 			echo "<td>\n";
 
 			$query = "	SELECT tunnus, nimi, koodi
 						FROM kustannuspaikka
-						WHERE yhtio = '{$kukarow['yhtio']}'
+						WHERE yhtio = '$kukarow[yhtio]'
 						and tyyppi = 'K'
 						and kaytossa != 'E'
-						ORDER BY koodi+0, koodi, nimi";
-			$result = pupe_query($query);
+						ORDER BY nimi";
+			$result = mysql_query($query) or pupe_error($query);
 
 			if (mysql_num_rows($result) > 0) {
-				echo "<select name = 'ikustp[{$i}]' style='width: 140px'><option value = ' '>".t("Ei kustannuspaikkaa");
+				echo "<select name = 'ikustp[$i]' style='width: 140px'><option value = ' '>".t("Ei kustannuspaikkaa");
 
-				while ($kustannuspaikkarow = mysql_fetch_assoc($result)) {
+				while ($kustannuspaikkarow=mysql_fetch_assoc ($result)) {
 					$valittu = "";
 					if (isset($ikustp[$i]) and $kustannuspaikkarow["tunnus"] == $ikustp[$i]) {
 						$valittu = "SELECTED";
 					}
-					echo "<option value = '{$kustannuspaikkarow['tunnus']}' {$valittu}>{$kustannuspaikkarow['koodi']} {$kustannuspaikkarow['nimi']}\n";
+					echo "<option value = '$kustannuspaikkarow[tunnus]' $valittu>$kustannuspaikkarow[koodi] $kustannuspaikkarow[nimi]\n";
 				}
 				echo "</select><br>\n";
 			}
 
 			$query = "	SELECT tunnus, nimi, koodi
 						FROM kustannuspaikka
-						WHERE yhtio = '{$kukarow['yhtio']}'
+						WHERE yhtio = '$kukarow[yhtio]'
 						and tyyppi = 'O'
 						and kaytossa != 'E'
-						ORDER BY koodi+0, koodi, nimi";
-			$result = pupe_query($query);
+						ORDER BY nimi";
+			$result = mysql_query($query) or pupe_error($query);
 
 			if (mysql_num_rows($result) > 0) {
-				echo "<select name = 'ikohde[{$i}]' style='width: 140px'><option value = ' '>".t("Ei kohdetta");
+				echo "<select name = 'ikohde[$i]' style='width: 140px'><option value = ' '>".t("Ei kohdetta");
 
-				while ($kustannuspaikkarow = mysql_fetch_assoc($result)) {
+				while ($kustannuspaikkarow=mysql_fetch_assoc ($result)) {
 					$valittu = "";
 					if (isset($ikohde[$i]) and $kustannuspaikkarow["tunnus"] == $ikohde[$i]) {
 						$valittu = "SELECTED";
 					}
-					echo "<option value = '{$kustannuspaikkarow['tunnus']}' {$valittu}>{$kustannuspaikkarow['koodi']} {$kustannuspaikkarow['nimi']}\n";
+					echo "<option value = '$kustannuspaikkarow[tunnus]' $valittu>$kustannuspaikkarow[koodi] $kustannuspaikkarow[nimi]\n";
 				}
 				echo "</select><br>\n";
 			}
 
 			$query = "	SELECT tunnus, nimi, koodi
 						FROM kustannuspaikka
-						WHERE yhtio = '{$kukarow['yhtio']}'
+						WHERE yhtio = '$kukarow[yhtio]'
 						and tyyppi = 'P'
 						and kaytossa != 'E'
-						ORDER BY koodi+0, koodi, nimi";
-			$result = pupe_query($query);
+						ORDER BY nimi";
+			$result = mysql_query($query) or pupe_error($query);
 
 			if (mysql_num_rows($result) > 0) {
-				echo "<select name = 'iprojekti[{$i}]' style='width: 140px'><option value = ' '>".t("Ei projektia");
+				echo "<select name = 'iprojekti[$i]' style='width: 140px'><option value = ' '>".t("Ei projektia");
 
-				while ($kustannuspaikkarow = mysql_fetch_assoc($result)) {
+				while ($kustannuspaikkarow=mysql_fetch_assoc ($result)) {
 					$valittu = "";
 					if (isset($iprojekti[$i]) and $kustannuspaikkarow["tunnus"] == $iprojekti[$i]) {
 						$valittu = "SELECTED";
 					}
-					echo "<option value = '{$kustannuspaikkarow['tunnus']}' {$valittu}>{$kustannuspaikkarow['koodi']} {$kustannuspaikkarow['nimi']}\n";
+					echo "<option value = '$kustannuspaikkarow[tunnus]' $valittu>$kustannuspaikkarow[koodi] $kustannuspaikkarow[nimi]\n";
 				}
 				echo "</select>\n";
 			}
 
 			echo "</td>\n";
-			echo "<td valign='top' align='right'><input type='text' size='13' style='text-align: right;' name='isumma[{$i}]' value='{$isumma_valuutassa[$i]}' onchange='javascript:tositesumma();' onkeyup='javascript:tositesumma();'> {$valkoodi}<br>&nbsp;&nbsp;{$isumma[$i]}&nbsp;&nbsp;{$valkoodi}</td>\n";
+			echo "<td valign='top' align='right'><input type='text' size='13' style='text-align: right;' name='isumma[$i]' value='$isumma_valuutassa[$i]' onchange='javascript:tositesumma();' onkeyup='javascript:tositesumma();'> $valkoodi<br>&nbsp;&nbsp;$isumma[$i]&nbsp;&nbsp;$valkoodi</td>\n";
 
 			if (!isset($hardcoded_alv) or $hardcoded_alv != 1) {
 				echo "<td valign='top'>" . alv_popup('ivero['.$i.']', $ivero[$i]) . "</td>\n";
@@ -1152,76 +946,16 @@
 				echo "<td></td>\n";
 			}
 
-			echo "<td>";
-
-			$cspan = 0;
-
-			if (isset($iliitos[$i]) and trim($iliitos[$i]) != '' and ((isset($iliitostunnus[$i]) and trim($iliitostunnus[$i]) != '') or (isset($ed_iliitostunnus[$i]) and trim($ed_iliitostunnus[$i]) != ''))) {
-
-				$tunnus_chk = (isset($iliitostunnus[$i]) and trim($iliitostunnus[$i]) != '') ? $iliitostunnus[$i] : $ed_iliitostunnus[$i];
-				$taulu_chk = $tunnus_chk == $ed_iliitostunnus[$i] ? $ed_iliitos[$i] : $iliitos[$i];
-
-				if ($taulu_chk == "A") {
-					$taulu = "asiakas";
-				}
-				elseif ($taulu_chk == "T") {
-					$taulu = "toimi";
-				}
-				else {
-					$taulu = "SQLERROR";
-				}
-
-				$query = "SELECT nimi, nimitark FROM {$taulu} WHERE yhtio = '{$kukarow['yhtio']}' AND tunnus = '{$tunnus_chk}'";
-				$asiakasres = pupe_query($query);
-				$asiakasrow = mysql_fetch_assoc($asiakasres);
-
-				echo "{$asiakasrow['nimi']} {$asiakasrow['nimitark']}";
-
-			}
-
-			echo "</td>";
-
-			if ($toimittajaid > 0) {
-				$cspan++;
-
-				echo "<td>";
-				echo "<input type='hidden' name='iliitostunnus[0]' value='default' />";
-
-				$chk = (isset($iliitostunnus[$i]) and trim($iliitostunnus[$i]) == $toimittajaid) ? ' checked' : ((isset($ed_iliitostunnus[$i]) and trim($ed_iliitostunnus[$i]) == $toimittajaid) ? ' checked' : '');
-
-				echo "<input type='hidden' name='ed_iliitostunnus[{$i}]' value='{$ed_iliitostunnus[$i]}' />";
-				echo "<input type='hidden' name='ed_iliitos[$i]' value='{$ed_iliitos[$i]}' />";
-				echo "<input type='hidden' name='iliitos[{$i}]' value='T' />";
-				echo "<input type='checkbox' class='liitosbox' name='iliitostunnus[{$i}]' value='{$toimittajaid}' {$chk} /> ";
-				echo "</td>\n";
-			}
-
-			if ($asiakasid > 0) {
-				$cspan++;
-
-				echo "<td>";
-				echo "<input type='hidden' name='iliitostunnus[0]' value='default' />";
-
-				$chk = (isset($iliitostunnus[$i]) and trim($iliitostunnus[$i]) == $asiakasid) ? ' checked' : ((isset($ed_iliitostunnus[$i]) and trim($ed_iliitostunnus[$i]) == $asiakasid) ? ' checked' : '');
-
-				echo "<input type='hidden' name='ed_iliitostunnus[{$i}]' value='{$ed_iliitostunnus[$i]}' />";
-				echo "<input type='hidden' name='ed_iliitos[$i]' value='{$ed_iliitos[$i]}' />";
-				echo "<input type='hidden' name='iliitos[{$i}]' value='A' />";
-				echo "<input type='checkbox' class='liitosbox' name='iliitostunnus[{$i}]' value='{$asiakasid}' {$chk} /> ";
-				echo "</td>\n";
-			}
-
-
 			echo "<td class='back'>";
-			if (isset($ivirhe[$i])) echo "<font class='error'>{$ivirhe[$i]}</font>";
+			if (isset($ivirhe[$i])) echo "<font class='error'>$ivirhe[$i]</font>";
 			echo "</td>\n";
 			echo "</tr>\n";
 
-			echo "<tr><td colspan='".(5+$cspan)."' nowrap><input type='text' name='iselite[{$i}]' value='{$iselite[$i]}' maxlength='150' size='80' placeholder='".t("Selite")."'></td></tr>\n";
+			echo "<tr><td colspan='4' nowrap><input type='text' name='iselite[$i]' value='$iselite[$i]' maxlength='150' size='80' placeholder='".t("Selite")."'></td></tr>\n";
 			echo "<tr style='height: 5px;'></tr>\n";
 		}
 
-		echo "<tr><th colspan='2'>".t("Tosite yhteensä").":</th><td><input type='text' size='13' style='text-align: right;' name='tositesum' value='' readonly> {$valkoodi}</td></tr>\n";
+		echo "<tr><th colspan='2'>".t("Tosite yhteensä").":</th><td><input type='text' size='13' style='text-align: right;' name='tositesum' value='' readonly> $valkoodi</td><td></td></tr>\n";
 		echo "</table><br>\n";
 
 		echo "<script language='javascript'>javascript:tositesumma();</script>";
@@ -1234,7 +968,7 @@
 				$heittotila = 'checked';
 			}
 
-			echo "<font class='error'>".t("HUOM: Tosite ei täsmää").":</font> <input type='checkbox' name='heittook' {$heittotila}> ".t("Hyväksy heitto").".<br><br>";
+			echo "<font class='error'>".t("HUOM: Tosite ei täsmää").":</font> <input type='checkbox' name='heittook' $heittotila> ".t("Hyväksy heitto").".<br><br>";
 		}
 
 		echo "<input type='submit' name='teetosite' value='".t("Tee tosite")."'></form>\n";

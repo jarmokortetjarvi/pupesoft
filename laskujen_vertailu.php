@@ -82,8 +82,13 @@
 				WHERE yhtio = '$kukarow[yhtio]'
 				and tyyppi = 'K'
 				and kaytossa != 'E'
+<<<<<<< HEAD
 				ORDER BY koodi+0, koodi, nimi";
 	$vresult = pupe_query($query);
+=======
+				ORDER BY nimi";
+	$vresult = mysql_query($query) or pupe_error($query);
+>>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 
 	echo "<tr><th>",t("Kustannuspaikka"),"</th>";
 

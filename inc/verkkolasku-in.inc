@@ -705,7 +705,7 @@
 					}
 				}
 
-				// Laitetaan tänä päivä laskun kirjauspäiväksi jos yhtiön parametri on tässä asennossa. (UNIKKO-INVOICE:ssa tapvm tulee erikseen, joten käytetään sitä siinä tapauksessa suoraan...)
+				// Laitetaan tänä päivä laskun tapahtumapäiväksi jos yhtiön parametri on tässä asennossa. (UNIKKO-INVOICE:ssa tapvm tulee erikseen, joten käytetään sitä siinä tapauksessa suoraan...)
 				if ($yhtiorow['ostolaskujen_paivays'] == "1" and $laskun_tyyppi != "UNIKKO-INVOICE") {
 					$laskun_tapvm = date("Ymd");
 				}
@@ -713,11 +713,6 @@
 				$tpp = (int) substr($laskun_tapvm, 6, 2);
 				$tpk = (int) substr($laskun_tapvm, 4, 2);
 				$tpv = (int) substr($laskun_tapvm, 0, 4);
-
-				// Laskun laskupäivä
-				$vpp = (int) substr($laskun_lapvm, 6, 2);
-				$vpk = (int) substr($laskun_lapvm, 4, 2);
-				$vpv = (int) substr($laskun_lapvm, 0, 4);
 
 				// Tsekataan laskun päiväys
 				if (!checkdate($tpk, $tpp, $tpv)) {
@@ -790,7 +785,7 @@
 						list($erv,$erk,$erp) = explode("-",strftime("%Y-%m-%d", mktime(0,0,0,date("m"),date("d")+1,date("Y"))));
 					}
 					elseif ($err > 0) {
-						$newer = strftime("%Y-%m-%d", mktime(0,0,0,$vpk, $vpp+$err, $vpv));
+						$newer = strftime("%Y-%m-%d", mktime(0,0,0,$tpk, $tpp+$err, $tpv));
 						$erp = (int) substr($newer, 8, 2);
 						$erk = (int) substr($newer, 5, 2);
 						$erv = (int) substr($newer, 0, 4);
@@ -818,7 +813,7 @@
 					$kapro = $trow['oletus_kapro'];
 
 					if ($krr > 0) {
-						$newer = strftime("%Y-%m-%d", mktime(0,0,0,$vpk, $vpp+$krr, $vpv));
+						$newer = strftime("%Y-%m-%d", mktime(0,0,0,$tpk, $tpp+$krr, $tpv));
 						$krp = (int) substr($newer, 8, 2);
 						$krk = (int) substr($newer, 5, 2);
 						$krv = (int) substr($newer, 0, 4);
@@ -942,6 +937,10 @@
 					$olmapvm = $krv."-".$krk."-".$krp;
 				}
 
+				$vpp = (int) substr($laskun_lapvm, 6, 2);
+				$vpk = (int) substr($laskun_lapvm, 4, 2);
+				$vpv = (int) substr($laskun_lapvm, 0, 4);
+
 				// Kirjoitetaan lasku
 				$query = "	INSERT into lasku set
 							yhtio 				= '$yhtio',
@@ -1038,11 +1037,20 @@
 				$result = pupe_query($query);
 
 				// Onko laskuriveillä useita alv-verokantoja?
+<<<<<<< HEAD
 				$ealvi = array_unique($ealvi);
 								
 				// Katsotaan alv laskuerittelystä
 				if (count($ealvi) == 1 and $ealvi[0] == "") {
 					$ealvi = array($lisavat[0]);
+=======
+				if (count($ealvi) > 0) {
+					$ealvi = array_unique($ealvi);
+				}
+				else {
+					//Katsotaan alv laskuerittelystä
+					$ealvi[0] = $lisavat[0];
+>>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 				}
 
 	 			// Tehdän pelkät oletustiliöinnit
@@ -1056,10 +1064,11 @@
 						$tili = $yhtiorow['muutkulut'];
 					}
 
-					if ($ealvi[0] != "") $vero = $ealvi[0];
-					else $vero = $oletusalvi;
+					$vero = $oletusalvi;
 
-					$vero = (float) $vero;
+					if ($ealvi[0] != '') {
+						$vero = $ealvi[0]; //Tuliko jotain verkkolaskulta
+					}
 
 					$kukarow['yhtio']   = $yhtio;
 					$kukarow['kuka']    = 'verkkolas';
@@ -1230,10 +1239,7 @@
 								$summa = $summa * -1;
 							}
 
-							if ($rtuoteno[$i]["alv"] != "") $vero = $rtuoteno[$i]["alv"];
-							else $vero = $oletusalvi;
-
-							$vero = (float) $vero;
+							$vero = (float) $rtuoteno[$i]["alv"];
 
 							$verkkolaskuveroton				+= $summa;
 							$verkkolaskuveroton_valuutassa	+= $summa_valuutassa;

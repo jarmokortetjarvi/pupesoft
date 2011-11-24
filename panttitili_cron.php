@@ -67,10 +67,9 @@
 						jt = 0,
 						hinta = '{$pantti_row['hinta']}',
 						hinta_valuutassa = 0,
-						alv = '{$pantti_row['alv']}',
+						alv = '{$trow['alv']}',
 						rivihinta = 0,
 						rivihinta_valuutassa = 0,
-						erikoisale = '{$pantti_row['erikoisale']}',
 						{$query_insert_lisa}
 						kate = 0,
 						kommentti = '',

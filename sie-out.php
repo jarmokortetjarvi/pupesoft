@@ -46,12 +46,10 @@ if ($kausi!='') {
 
 		//Kustannuspaikan koodien haku
 		echo "<font class='message'>Tarkenteet</font><br>";
-
 		$query = "	SELECT tunnus, nimi
 					FROM kustannuspaikka
 					WHERE yhtio = '$kukarow[yhtio]'
-					and kaytossa != 'E'
-					ORDER BY tyyppi, koodi+0, koodi, nimi";
+					and kaytossa != 'E'";
 		$result = mysql_query($query)
 					or die ("Kysely ei onnistu $query");
 		$ulos='';

@@ -89,8 +89,12 @@ if ($laskun_tyyppi == "INV02") {
 $tuotetiedot	= $xml->InvoiceRow;
 $i				= 0;
 $rtuoteno		= array();
+<<<<<<< HEAD
 $ealvi		 	= array("");
 $lisavat	 	= array("");
+=======
+$ealvi		 	= array();
+>>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 
 if (count($tuotetiedot) > 0) {
 	foreach ($tuotetiedot as $tuotetieto) {
@@ -107,10 +111,10 @@ if (count($tuotetiedot) > 0) {
 			$rtuoteno[$i]["nimitys"] = utf8_decode($tuotetieto->ArticleName);
 			$rtuoteno[$i]["rivihinta"] = (float) str_replace(",", ".", $tuotetieto->RowVatExcludedAmount);
 
-			$xvati = str_replace(",", ".", $tuotetieto->RowVatRatePercent);
+			$xvati = (float) str_replace(",", ".", $tuotetieto->RowVatRatePercent);
 
 			$rtuoteno[$i]["alv"] = $xvati;
-			$ealvi[$i] = $xvati;
+			$ealvi[] = $xvati;
 
 			$rtuoteno[$i]["ale"] = (float) str_replace(",", ".", $tuotetieto->RowDiscountPercent);
 			$rtuoteno[$i]["hinta"] = (float) str_replace(",", ".", $tuotetieto->UnitPriceAmount);
@@ -145,11 +149,15 @@ if (count($tuotetiedot) > 0) {
 
 // Verotiedot
 $vattiedot	= $xml->InvoiceDetails->VatSpecificationDetails;
+<<<<<<< HEAD
+=======
+$lisavat	= array();
+>>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 $i 			= 0;
 
 if (count($vattiedot) > 0) {
 	foreach ($vattiedot as $vattieto) {
-		$lisavat[$i] = str_replace(",", ".", $vattieto->VatRatePercent);
+		$lisavat[$i] = (float) str_replace(",", ".", $vattieto->VatRatePercent);
 		$i++;
 	}
 }

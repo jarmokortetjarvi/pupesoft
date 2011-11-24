@@ -126,7 +126,7 @@ else {
 					from kustannuspaikka
 					where yhtio = '$kukarow[yhtio]'
 					and kaytossa != 'E'
-					ORDER BY tyyppi, koodi+0, koodi, nimi";
+					order by tyyppi, tunnus";
 		$result = mysql_query($query) or pupe_error($query);
 
 		while($row = mysql_fetch_array($result)) {

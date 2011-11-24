@@ -3,33 +3,32 @@
 	// jos tullaan t‰‰lt‰ itsest‰ niin tarvitaan paramertit
 	if (strpos($_SERVER['SCRIPT_NAME'], "yllapitosopimukset.php") !== FALSE) {
 		require("../inc/parametrit.inc");
-
-		echo "<font class='head'>".t("Yll‰pitosopimukset")."</font><hr>";
-
-		js_popup();
-
-		echo " <SCRIPT TYPE='text/javascript' LANGUAGE='JavaScript'>
-			<!--
-
-			function toggleAll(toggleBox) {
-
-				var currForm = toggleBox.form;
-				var isChecked = toggleBox.checked;
-				var nimi = toggleBox.name;
-
-				for (var elementIdx=0; elementIdx<currForm.elements.length; elementIdx++) {
-					if (currForm.elements[elementIdx].type == 'checkbox' && currForm.elements[elementIdx].name.substring(0,5) == nimi) {
-						currForm.elements[elementIdx].checked = isChecked;
-					}
-				}
-			}
-
-			//-->
-			</script>";
 	}
 	else {
 		ob_start(); // ei echota mit‰‰‰n jos kutsutaan muualta!
 	}
+
+	echo "<font class='head'>".t("Yll‰pitosopimukset")."</font><hr>";
+
+	js_popup();
+	echo " <SCRIPT TYPE='text/javascript' LANGUAGE='JavaScript'>
+		<!--
+
+		function toggleAll(toggleBox) {
+
+			var currForm = toggleBox.form;
+			var isChecked = toggleBox.checked;
+			var nimi = toggleBox.name;
+
+			for (var elementIdx=0; elementIdx<currForm.elements.length; elementIdx++) {
+				if (currForm.elements[elementIdx].type == 'checkbox' && currForm.elements[elementIdx].name.substring(0,5) == nimi) {
+					currForm.elements[elementIdx].checked = isChecked;
+				}
+			}
+		}
+
+		//-->
+		</script>";
 
 	if ($tee == "laskuta" and count($laskutapvm) > 0) {
 		$poikkeus = "ei";
@@ -59,8 +58,8 @@
 						LEFT JOIN laskun_lisatiedot ON lasku.yhtio = laskun_lisatiedot.yhtio and lasku.tunnus = laskun_lisatiedot.otunnus
 						WHERE lasku.yhtio = '{$kukarow["yhtio"]}'
 						and lasku.tunnus = '$tilausnumero'";
-			$result = pupe_query($query);
-			$soprow = mysql_fetch_assoc($result);
+			$result = mysql_query($query) or pupe_error($query);
+			$soprow = mysql_fetch_array($result);
 
 			$laskutus_kk = explode(",", $soprow["sopimus_kk"]);
 			$laskutus_pp = explode(",", $soprow["sopimus_pp"]);
@@ -171,7 +170,7 @@
 							WHERE yhtio = '$kukarow[yhtio]'
 							and tunnus  = '$tilausnumero'
 							and tila    = '0'";
-				$result = pupe_query($query);
+				$result = mysql_query($query) or pupe_error($query);
 
 				// p‰ivitet‰‰n tila myyntitilaus valmis, suoraan laskutukseen (clearing on sopimus ja swift kent‰ss‰ on mik‰ soppari on kopsattu)
 				$query  = "	UPDATE lasku
@@ -184,7 +183,7 @@
 							WHERE yhtio 	= '$kukarow[yhtio]'
 							and tunnus  	= '$ok'
 							and tila    	= '0'";
-				$result = pupe_query($query);
+				$result = mysql_query($query) or pupe_error($query);
 
 				// tyyppi takasin L, merkataan rivit ker‰tyks ja toimitetuks
 				$query = "	UPDATE tilausrivi
@@ -192,15 +191,15 @@
 							WHERE yhtio		= '$kukarow[yhtio]'
 							and otunnus		= '$ok'
 							and tyyppi  	= '0'";
-				$result = pupe_query($query);
+				$result = mysql_query($query) or pupe_error($query);
 
 				// haetaan laskun tiedot
 				$query = "	SELECT *
 							FROM lasku
 							WHERE yhtio = '$kukarow[yhtio]'
 							and tunnus  = '$ok'";
-				$result = pupe_query($query);
-				$laskurow = mysql_fetch_assoc($result);
+				$result = mysql_query($query) or pupe_error($query);
+				$laskurow = mysql_fetch_array($result);
 
 				$kukarow["kesken"] = $ok;
 
@@ -215,7 +214,7 @@
 							WHERE yhtio = '$kukarow[yhtio]'
 							and tunnus  = '$ok'
 							and tila = 'L'";
-				$result = pupe_query($query);
+				$result = mysql_query($query) or pupe_error($query);
 
 				// tyyppi takasin L, merkataan rivit ker‰tyks ja toimitetuks
 				$query = "	UPDATE tilausrivi
@@ -225,7 +224,7 @@
 							WHERE yhtio	= '$kukarow[yhtio]'
 							and otunnus	= '$ok'
 							and tyyppi = 'L'";
-				$result = pupe_query($query);
+				$result = mysql_query($query) or pupe_error($query);
 
 				if ($jatakesken != "JOO") {
 					// laskutetaan tilaus
@@ -272,7 +271,7 @@
 				lasku.alatila in ('V','X')
 				GROUP BY laskutunnus
 				ORDER BY liitostunnus, sopimus_loppupvm, sopimus_alkupvm";
-	$result = pupe_query($query);
+	$result = mysql_query($query) or pupe_error($query);
 
 	if (mysql_num_rows($result) > 0) {
 
@@ -298,9 +297,9 @@
 					WHERE
 					yhtio = '$kukarow[yhtio]'
 					ORDER by kirjoitin";
-		$kirre = pupe_query($query);
+		$kirre = mysql_query($query) or pupe_error($query);
 
-		while ($kirrow = mysql_fetch_assoc($kirre)) {
+		while ($kirrow = mysql_fetch_array($kirre)) {
 			$sel = "";
 			if ($kirrow["tunnus"] == $kukarow["kirjoitin"]) {
 				$sel = "SELECTED";
@@ -332,7 +331,7 @@
 		$arvoyhteensa  = 0;
         $summayhteensa = 0;
 
-		while ($row = mysql_fetch_assoc($result)) {
+		while ($row = mysql_fetch_array($result)) {
 
 			echo "<tr class='aktiivi'>";
 			echo "<td valign='top'>$row[laskutunnus]</td>";
@@ -415,7 +414,7 @@
 								and luontiaika   = '$pvmloop_vv-$pvmloop_kk-$pvmloop_pp'
 								and clearing     = 'sopimus'
 								and swift        = '$row[laskutunnus]'";
-					$chkres = pupe_query($query);
+					$chkres = mysql_query($query) or pupe_error($query);
 
 					if (mysql_num_rows($chkres) == 0) {
 						$laskuttamatta .= "	<input type='checkbox' name='laskutapvm[$pointteri]' value='$pvmloop_vv-$pvmloop_kk-$pvmloop_pp'>
@@ -432,7 +431,7 @@
 						$summayhteensa 	+= $row["summa"];
 					}
 					else {
-						$chkrow = mysql_fetch_assoc($chkres);
+						$chkrow = mysql_fetch_array($chkres);
 						$laskutettu .= "$pvmloop_pp.$pvmloop_kk.$pvmloop_vv ($chkrow[laskunro])<br>";
 						$laskutettu_vika = "$pvmloop_pp.$pvmloop_kk.$pvmloop_vv ($chkrow[laskunro])";
 					}
@@ -501,6 +500,12 @@
 		$tanaanvv = date("Y");
 
 
+<<<<<<< HEAD
+=======
+		echo "<br>".t("ƒl‰ aja laskutusta").": <input type='checkbox' name='jatakesken' value='JOO'>";
+
+		echo "<br><input type='submit' value='".t("Laskuta")."'>";
+>>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 		echo "</form>";
 		
 		echo "	<SCRIPT LANGUAGE=JAVASCRIPT>
@@ -593,7 +598,7 @@
 
 	// jos tullaan t‰‰lt‰ itsest‰ niin n‰ytet‰‰n footer
 	if (strpos($_SERVER['SCRIPT_NAME'], "yllapitosopimukset.php") !== FALSE) {
-		require ("inc/footer.inc");
+		require ("../inc/footer.inc");
 	}
 	else {
 		ob_end_clean(); // ei echota mit‰‰‰n jos kutsutaan muualta!

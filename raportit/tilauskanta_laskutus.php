@@ -341,7 +341,7 @@
 						WHERE yhtio = '$kukarow[yhtio]'
 						and kaytossa != 'E'
 						and tyyppi = 'K'
-						ORDER BY koodi+0, koodi, nimi";
+						order by tunnus";
 			$sresult = mysql_query($query) or pupe_error($query);
 
 			echo "<select name='kustannuspaikka'>";

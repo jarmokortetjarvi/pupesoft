@@ -643,7 +643,6 @@
 				}
 
 				echo "<input type='hidden' name='tmpfilenimi' value='$excelnimi'>";
-				echo "<input type='hidden' name='toim' value='$toim'>";
 				echo "<td class='back'><input type='submit' value='".t("Tallenna")."'></td></tr></form>";
 				echo "</table>";
 

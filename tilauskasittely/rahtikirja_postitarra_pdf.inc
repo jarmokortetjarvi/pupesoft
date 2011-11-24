@@ -66,6 +66,7 @@
 	// tulostetaan niin monta lappua kun on kollejakin
 	for ($tulostuskpl=1; $tulostuskpl<=$tulostakolli; $tulostuskpl++) {
 
+<<<<<<< HEAD
 		$kuka = sprintf("%02d",$tulostuskpl); 		// laitetaan tulostuskpl alkuun niin jokalapulla on uniikki viiva
 
 		if (substr($rivi["rahtikirjanro"], 0, 4) == "JJFI") {
@@ -74,6 +75,10 @@
 		else {
 			$oma = sprintf("%09d", $rtunnus); // 9, pitk‰ numero tulee rahtikirja taulun tunnuksesta, pit‰‰ olaa uniikki
 		}
+=======
+		$kuka    = sprintf("%02d",$tulostuskpl); 		// laitetaan tulostuskpl alkuun niin jokalapulla on uniikki viiva
+		$oma     = sprintf("%09d",$rtunnus); 			// 9, pitk‰ numero tulee rahtikirja taulun tunnuksesta, pit‰‰ olaa uniikki
+>>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 
 		// tehd‰‰n viivakoodit
 		$viiva1   = "JJFI$toitarow[sopimusnro]$kuka$oma";
