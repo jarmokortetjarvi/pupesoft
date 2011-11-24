@@ -1914,9 +1914,12 @@
 						}
 
 						if (isset($workbook)) {
+							$excelsarake=0;
 							foreach ($rows[0] as $ken_nimi => $null) {
-								if ($ken_nimi != "asiakaslista" and $ken_nimi != "tuotelista") $worksheet->write($excelrivi, $i, ucfirst(t($ken_nimi)), $format_bold);
+								if ($ken_nimi != "asiakaslista" and $ken_nimi != "tuotelista") $worksheet->write($excelrivi, $excelsarake++, ucfirst(t($ken_nimi)), $format_bold);
 							}
+
+							$excelsarake = 0;
 							$excelrivi++;
 						}
 
@@ -1939,8 +1942,9 @@
 
 							if ($rivimaara > $rivilimitti) $bar->increase();
 
-							$piilosumma = 0;
-							$ken_lask   = 0;
+							$piilosumma  = 0;
+							$ken_lask    = 0;
+							$excelsarake = 0;
 
 							foreach ($row as $ken_nimi => $kentta) {
 								if ($ken_lask >= $data_start_index and is_numeric($kentta)) {
@@ -1968,46 +1972,49 @@
 									if ($rivimaara <= $rivilimitti) echo "<tr>";
 
 									foreach ($valisummat as $vnim => $vsum) {
-										if ((string) $vsum != '') {
-											$vsum = sprintf("%.2f", $vsum);
+
+										if (!is_numeric($vsum)) {
+											$vsum = "";
 										}
-										if ($vnim == "kateprosnyt") {
+										elseif ($vnim == "kateprosnyt") {
 											if ($valisummat["myyntinyt"] <> 0) 		$vsum = round($valisummat["katenyt"] / abs($valisummat["myyntinyt"]) * 100, 2);
 										}
-										if ($vnim == "kateprosed") {
+										elseif ($vnim == "kateprosed") {
 											if ($valisummat["myyntied"] <> 0) 		$vsum = round($valisummat["kateed"] / abs($valisummat["myyntied"]) * 100, 2);
 										}
-										if ($vnim == "nettokateprosnyt") {
+										elseif ($vnim == "nettokateprosnyt") {
 											if ($valisummat["myyntinyt"] <> 0) 		$vsum = round($valisummat["nettokatenyt"] / abs($valisummat["myyntinyt"]) * 100, 2);
 										}
-										if ($vnim == "nettokateprosed") {
+										elseif ($vnim == "nettokateprosed") {
 											if ($valisummat["myyntied"] <> 0) 		$vsum = round($valisummat["nettokateed"] / abs($valisummat["myyntied"]) * 100, 2);
 										}
-										if ($vnim == "myyntiind") {
+										elseif ($vnim == "myyntiind") {
 											if ($valisummat["myyntied"] <> 0) 		$vsum = round($valisummat["myyntinyt"] / $valisummat["myyntied"],2);
 										}
-										if ($vnim == "kateind") {
+										elseif ($vnim == "kateind") {
 											if ($valisummat["kateed"] <> 0) 		$vsum = round($valisummat["katenyt"] / $valisummat["kateed"],2);
 										}
-										if ($vnim == "nettokateind") {
+										elseif ($vnim == "nettokateind") {
 											if ($valisummat["nettokateed"] <> 0) 	$vsum = round($valisummat["nettokatenyt"] / $valisummat["nettokateed"],2);
 										}
-										if ($vnim == "myykplind") {
+										elseif ($vnim == "myykplind") {
 											if ($valisummat["myykpled"] <> 0)		$vsum = round($valisummat["myykplnyt"] / $valisummat["myykpled"],2);
 										}
-										if ($vnim == "budjindnyt") {
+										elseif ($vnim == "budjindnyt") {
 											if ($valisummat["budjnyt"] <> 0)		$vsum = round($valisummat["myyntinyt"] / $valisummat["budjnyt"],2);
+										}
+										elseif ((string) $vsum != '') {
+											$vsum = sprintf("%.2f", $vsum);
 										}
 
 										if ($rivimaara <= $rivilimitti) echo "<td class='tumma' align='right'>{$vsum}</td>";
 
 										if (isset($workbook)) {
-											$worksheet->writeNumber($excelrivi, $excelsarake, $vsum);
+											$worksheet->write($excelrivi, $excelsarake++, $vsum);
 										}
-
-										$excelsarake++;
-
 									}
+
+									$excelsarake = 0;
 									$excelrivi++;
 
 									if ($rivimaara <= $rivilimitti) echo "</tr>";
@@ -2338,7 +2345,7 @@
 											}
 
 											if (isset($workbook)) {
-												$worksheet->writeNumber($excelrivi, $i, sprintf("%.02f",$row[$ken_nimi]));
+												$worksheet->writeNumber($excelrivi, $excelsarake++, sprintf("%.02f",$row[$ken_nimi]));
 											}
 										}
 										elseif ($ken_nimi == 'sarjanumero') {
@@ -2347,7 +2354,7 @@
 											}
 
 											if (isset($workbook)) {
-												$worksheet->writeString($excelrivi, $i, strip_tags(str_replace("<br>", "\n", $row[$ken_nimi])));
+												$worksheet->writeString($excelrivi, $excelsarake++, strip_tags(str_replace("<br>", "\n", $row[$ken_nimi])));
 											}
 										}
 										else {
@@ -2356,7 +2363,7 @@
 											}
 
 											if (isset($workbook)) {
-												$worksheet->writeString($excelrivi, $i, strip_tags(str_replace("<br>", " / ", $row[$ken_nimi])));
+												$worksheet->writeString($excelrivi, $excelsarake++, strip_tags(str_replace("<br>", " / ", $row[$ken_nimi])));
 											}
 										}
 									}
@@ -2365,6 +2372,8 @@
 								}
 
 								if ($rivimaara <= $rivilimitti) echo "</tr>\n";
+
+								$excelsarake = 0;
 								$excelrivi++;
 
 								$ken_lask = 0;
@@ -2411,47 +2420,51 @@
 							$excelsarake = $myyntiind = $kateind = $nettokateind = $myykplind = 0;
 
 							foreach ($valisummat as $vnim => $vsum) {
-								if ((string) $vsum != '') {
-									$vsum = sprintf("%.2f", $vsum);
+
+								if (!is_numeric($vsum)) {
+									$vsum = "";
 								}
-								if ($vnim == "kateprosnyt") {
+								elseif ($vnim == "kateprosnyt") {
 									if ($valisummat["myyntinyt"] <> 0) 		$vsum = round($valisummat["katenyt"] / abs($valisummat["myyntinyt"]) * 100, 2);
 								}
-								if ($vnim == "kateprosed") {
+								elseif ($vnim == "kateprosed") {
 									if ($valisummat["myyntied"] <> 0) 		$vsum = round($valisummat["kateed"] / abs($valisummat["myyntied"]) * 100, 2);
 								}
-								if ($vnim == "nettokateprosnyt") {
+								elseif ($vnim == "nettokateprosnyt") {
 									if ($valisummat["myyntinyt"] <> 0) 		$vsum = round($valisummat["nettokatenyt"] / abs($valisummat["myyntinyt"]) * 100, 2);
 								}
-								if ($vnim == "nettokateprosed") {
+								elseif ($vnim == "nettokateprosed") {
 									if ($valisummat["myyntied"] <> 0) 		$vsum = round($valisummat["nettokateed"] / abs($valisummat["myyntied"]) * 100, 2);
 								}
-								if ($vnim == "myyntiind") {
+								elseif ($vnim == "myyntiind") {
 									if ($valisummat["myyntied"] <> 0) 		$vsum = round($valisummat["myyntinyt"] / $valisummat["myyntied"],2);
 								}
-								if ($vnim == "kateind") {
+								elseif ($vnim == "kateind") {
 									if ($valisummat["kateed"] <> 0) 		$vsum = round($valisummat["katenyt"] / $valisummat["kateed"],2);
 								}
-								if ($vnim == "nettokateind") {
+								elseif ($vnim == "nettokateind") {
 									if ($valisummat["nettokateed"] <> 0) 	$vsum = round($valisummat["nettokatenyt"] / $valisummat["nettokateed"],2);
 								}
-								if ($vnim == "myykplind") {
+								elseif ($vnim == "myykplind") {
 									if ($valisummat["myykpled"] <> 0)		$vsum = round($valisummat["myykplnyt"] / $valisummat["myykpled"],2);
 								}
-								if ($vnim == "budjindnyt") {
+								elseif ($vnim == "budjindnyt") {
 									if ($valisummat["budjnyt"] <> 0)		$vsum = round($valisummat["myyntinyt"] / $valisummat["budjnyt"],2);
+								}
+								elseif ((string) $vsum != '') {
+									$vsum = sprintf("%.2f", $vsum);
 								}
 
 								if ($rivimaara <= $rivilimitti) echo "<td class='tumma' align='right'>{$vsum}</td>";
 
 								if(isset($workbook)) {
-									$worksheet->writeNumber($excelrivi, $excelsarake, $vsum);
+									$worksheet->write($excelrivi, $excelsarake++, $vsum);
 								}
-
-								$excelsarake++;
-
 							}
+
+							$excelsarake = 0;
 							$excelrivi++;
+
 							if ($rivimaara <= $rivilimitti) echo "</tr>";
 						}
 
@@ -2493,11 +2506,12 @@
 
 							if ($rivimaara <= $rivilimitti) echo "<td class='tumma' align='right'>{$vsum}</td>";
 
-							if(isset($workbook)) {
-								$worksheet->writeNumber($excelrivi, $excelsarake, $vsum);
-								$excelsarake++;
+							if (isset($workbook)) {
+								$worksheet->writeNumber($excelrivi, $excelsarake++, $vsum);
 							}
 						}
+
+						$excelsarake = 0;
 						$excelrivi++;
 
 						if ($rivimaara <= $rivilimitti) echo "</tr></table>";

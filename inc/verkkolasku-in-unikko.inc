@@ -6,11 +6,8 @@
 	$verkkotunnus_vas	= "003720428100";
 	$laskun_tyyppi 		= "UNIKKO-INVOICE";
 	$a 					= 0;
-<<<<<<< HEAD
 	$ealvi		 		= array("");
 	$lisavat			= array("");
-=======
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 
 	foreach ($xml->LedgerJournalTable->LedgerJournalTrans as $lasku) {
 

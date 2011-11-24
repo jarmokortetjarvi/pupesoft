@@ -851,18 +851,12 @@ if (!function_exists('rivi_original')) {
 		if ($row["myyntihinta_maara"] > 1) {
 			$kala = $kala - 7;
 			$pdf_lasku->draw_text(390, $kala, hintapyoristys($veroton_hinta*$row["myyntihinta_maara"])." / $row[myyntihinta_maara] $row[yksikko]", $thispage, $pieni);
-<<<<<<< HEAD
 			$kalakorjaus = 7;
 		}
 		else {
 			$kalakorjaus = 0;
 		}
 
-=======
-		}
-
-
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 		// Ensimmäinen rivi piirretty
 		$kala = $kala - 10;
 
@@ -890,7 +884,6 @@ if (!function_exists('rivi_original')) {
 
 		// Kommentti
 		if (trim($row["kommentti"]) != '') {
-<<<<<<< HEAD
 
 			$kommentit = explode("\n", trim($row["kommentti"]));
 
@@ -898,12 +891,6 @@ if (!function_exists('rivi_original')) {
 				$pdf_lasku->draw_text(35, $kala+$kalakorjaus, t("Tilaus", $kieli).": ".$row["otunnus"], $thispage, $pieni);
 				$kala = $kala - 10;
 			}
-=======
-			$kommentit = explode("\n", trim($row["kommentti"]));
-
-			$pdf_lasku->draw_text(35, $kala, t("Tilaus", $kieli).": ".$row["otunnus"], $thispage, $pieni);
-			$kala = $kala - 10;
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 
 			foreach ($kommentit as $akey => $kommentti) {
 
@@ -928,11 +915,7 @@ if (!function_exists('rivi_original')) {
 
 					foreach ($sanat as $sana) {
 						if ($pdf_lasku->strlen($lause, $pieni) > $rpit2) {
-<<<<<<< HEAD
 							$pdf_lasku->draw_text(35, $kala+$kalakorjaus, trim($lause), $thispage, $pieni);
-=======
-							$pdf_lasku->draw_text(35, $kala, trim($lause), $thispage, $pieni);
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 							$kala  = $kala - 10;
 							$lause = "";
 						}
@@ -944,22 +927,14 @@ if (!function_exists('rivi_original')) {
 				}
 
 				if (trim($kommentti) != "") {
-<<<<<<< HEAD
 					$pdf_lasku->draw_text(35, $kala+$kalakorjaus, trim($kommentti), $thispage, $pieni);
-=======
-					$pdf_lasku->draw_text(35, $kala, trim($kommentti), $thispage, $pieni);
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 					$kala = $kala - 10;
 				}
 			}
 			$kala += 10;
 		}
 		elseif ($laskutyyppi != 6) {
-<<<<<<< HEAD
 			$pdf_lasku->draw_text(35, $kala+$kalakorjaus, t("Tilaus", $kieli).": ".$row["otunnus"], $thispage, $pieni);
-=======
-			$pdf_lasku->draw_text(35, $kala, t("Tilaus", $kieli).": ".$row["otunnus"], $thispage, $pieni);
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 		}
 
 		$kala = $kala - 15;
@@ -1320,11 +1295,7 @@ if (!function_exists('loppu')) {
 	function loppu ($laskurow, $asiakasrow, $kieli, $pdf_lasku, $toim, $thispage, $masrow, $sivu, $summa, $arvo, $page, $vientikala, $laskutyyppi, $vikasivu = "") {
 		global $yhtiorow, $kukarow, $rectparam, $norm, $pieni, $boldi, $pieni_boldi, $iso;
 
-<<<<<<< HEAD
 		if ($yhtiorow["viivakoodi_laskulle"] == "K" and $laskurow["maa"] == "FI" and $laskurow["summa"] > 0 and $vikasivu != "" and function_exists("imagecreate") and $laskurow["vienti"] == "" and strtoupper($laskurow["maa"]) == strtoupper($yhtiorow["maa"])) {
-=======
-		if ($yhtiorow["viivakoodi_laskulle"] == "K" and $laskurow["maa"] == "FI" and $laskurow["summa"] > 0 and $vikasivu != "" and function_exists("imagecreate")) {
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 			$piirra_viivakoodi = true;
 			$barcode_korkeus = 50;
 		}
@@ -1339,13 +1310,6 @@ if (!function_exists('loppu')) {
 			}
 		}
 
-<<<<<<< HEAD
-=======
-		if ($laskurow["vienti"] != "" or strtoupper($laskurow["maa"]) != strtoupper($yhtiorow["maa"])) {
-			$piirra_viivakoodi = false;
-		}
-
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 		//yhteensärivi
 		$pdf_lasku->draw_rectangle(110+$vientikala+$barcode_korkeus, 20,  90+$vientikala+$barcode_korkeus, 580,	$thispage, $rectparam);
 		$pdf_lasku->draw_rectangle(110+$vientikala+$barcode_korkeus, 207, 90+$vientikala+$barcode_korkeus, 580,	$thispage, $rectparam);
@@ -1520,11 +1484,7 @@ if (!function_exists('loppu')) {
 
 		if ((int) $laskurow["yhtio_toimipaikka"] != 0) {
 			// haetaan toimipaikan tiedot
-<<<<<<< HEAD
 			$alhqur = "SELECT * from yhtion_toimipaikat where yhtio='$laskurow[yhtio]' and tunnus='$laskurow[yhtio_toimipaikka]'";
-=======
-			$alhqur = "SELECT * from yhtion_toimipaikat where yhtio='$laskurow[yhtio]' and vat_numero='$laskurow[yhtio_toimipaikka]'";
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 			$alhire = pupe_query($alhqur);
 
 			if (mysql_num_rows($alhire) == 1) {
@@ -1577,7 +1537,6 @@ if (!function_exists('loppu')) {
 			$width = 340;
 			$height = $barcode_korkeus-1 * 1.2;
 			$style = BCS_IMAGE_JPEG;
-<<<<<<< HEAD
 
 			$onko_tili1_iban = tarkista_iban($pankkitiedot["pankkitili1"]);
 			$onko_iban1_iban = tarkista_iban($pankkitiedot["pankkiiban1"]);
@@ -1591,9 +1550,6 @@ if (!function_exists('loppu')) {
 			else {
 				$code = PalautaPankkiviivakoodi($pankkitiedot["pankkitili1"], $summa, $erapaiva, $laskurow["viite"], 2);
 			}
-=======
-			$code = PalautaPankkiviivakoodi($pankkitiedot["pankkitili1"], $summa, $erapaiva, $laskurow["viite"]);
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 
 			$font = 5;
 			$xres = 1;
@@ -1822,7 +1778,6 @@ if (!function_exists('alvierittely')) {
 if (!function_exists('PalautaPankkiviivakoodi')) {
 	function PalautaPankkiviivakoodi($tilinumero, $laskun_summa = 0, $erapv = "00.00.0000", $viitenumero = 0, $versio = 2) {
 
-<<<<<<< HEAD
 		if ($versio == '2') {
 			$pankkitili = $tilinumero;
 			include("inc/pankkitilinoikeellisuus.php");
@@ -1830,15 +1785,6 @@ if (!function_exists('PalautaPankkiviivakoodi')) {
 		else {
 			// tarkista_iban ei osaa tarkistaa kuin Suomalaisia tilinumeroita
 			$pankkitili = substr(tarkista_iban($tilinumero), 2); // Maatunnus pois
-=======
-		if( $versio == '2' ){
-			$pankkitili = $tilinumero;
-			include("inc/pankkitilinoikeellisuus.php");
-		}
-		else{
-			// tarkista_iban ei osaa tarkistaa kuin Suomalaisia tilinumeroita
-			$pankkitili = substr(tarkista_iban( $tilinumero ), 2); // Maatunnus pois
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 		}
 
 		if ($pankkitili == "") {
@@ -1858,17 +1804,10 @@ if (!function_exists('PalautaPankkiviivakoodi')) {
 		$konekielinen_summa = sprintf("%08d", $konekielinen_summa);
 
 		// Viitenumero
-<<<<<<< HEAD
 		if ($versio == '2' or $versio == '4' ) {
 			$konekielinen_viitenumero = sprintf("%020d", $viitenumero);
 		}
 		elseif ($versio == '5') {
-=======
-		if( $versio == '2' or $versio == '4' ){
-			$konekielinen_viitenumero = sprintf("%020d", $viitenumero);
-		}
-		elseif( $versio == '5' ){
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 			// Annettu viite pitaisi olla muodossa RFxxyy...yy, jossa xx on tarkistenumero
 			$tarkiste = substr($viitenumero,2,2);
 			$viitenumero = substr($viitenumero,4);
@@ -1883,36 +1822,21 @@ if (!function_exists('PalautaPankkiviivakoodi')) {
 		$konekielinen_erapv = $vv.$kk.$pp;
 
 		// Varalla
-<<<<<<< HEAD
 		if ($versio=='2') {
 			$vara = "0000";
 		}
 		elseif ($versio=='4') {
-=======
-		if($versio=='2'){
-			$vara = "0000";
-		}
-		elseif($versio=='4'){
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 			$vara = "000";
 		}
 		else $vara = '';
 
 		// Koonti
 		$pankkiviivakoodi = $versio.$konekielinen_tilinumero.$konekielinen_summa;
-<<<<<<< HEAD
 
 		if ($versio=='2') {
 			$pankkiviivakoodi .= $konekielinen_viitenumero.$konekielinen_erapv.$vara;
 		}
 		else {
-=======
-		
-		if($versio=='2'){
-			$pankkiviivakoodi .= $konekielinen_viitenumero.$konekielinen_erapv.$vara;
-		}
-		else{
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 			$pankkiviivakoodi .= $vara.$konekielinen_viitenumero.$konekielinen_erapv;
 		}
 
@@ -1920,19 +1844,11 @@ if (!function_exists('PalautaPankkiviivakoodi')) {
 		$viite = $pankkiviivakoodi;
 
 		// Vain versio kakkoseen tarkiste 1
-<<<<<<< HEAD
 		if ($versio == '2') {
 			// Menee tasan samalla systeemilla kuin viitenumeron tarkistusnumeron laskeminen..
 			include("inc/generoiviite.inc");
 		}
 
-=======
-		if($versio == '2'){
-			// Menee tasan samalla systeemilla kuin viitenumeron tarkistusnumeron laskeminen..
-			include("inc/generoiviite.inc");
-		}
-		
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 		return($viite);
 	}
 }
@@ -2253,11 +2169,7 @@ if (!function_exists("tulosta_lasku")) {
 				$kutsu = t("Lasku", $kieli)." ".$laskurow["laskunro"];
 
 				if ($yhtiorow["liitetiedostojen_nimeaminen"] == "N") {
-<<<<<<< HEAD
 					$kutsu .= ", ".trim($laskurow["nimi"]);
-=======
-					$kutsu .= " ".trim($laskurow["nimi"]);
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 				}
 
 				$liite 				= $pdf_laskufilenimi;
@@ -2290,11 +2202,7 @@ if (!function_exists("tulosta_lasku")) {
 					$kutsu = t("Lasku", $kieli)." ".$laskurow["laskunro"];
 
 					if ($yhtiorow["liitetiedostojen_nimeaminen"] == "N") {
-<<<<<<< HEAD
 						$kutsu .= ", ".trim($laskurow["nimi"]);
-=======
-						$kutsu .= " ".trim($laskurow["nimi"]);
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 					}
 
 					$liite 				= $pdf_laskufilenimi;

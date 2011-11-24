@@ -2819,14 +2819,13 @@
 		$sel = array();
 		$sel[$apu] = "selected";
 
-		$ulos .= "<option value = ''>".t("Virallisen varastonarvon laskentaan käytetään keikkaan liitettyjen huolinta-/rahtilaskujen summaa");
-		$ulos .= "<option value = 'KP' {$sel["KP"]}>".t("Virallisen varastonarvon laskentaan käytetään keikalle syötettyä kuluprosenttia");
+		$ulos .= "<option value = ''>".t("Virallisen varastonarvon laskentaan käytetään keikkaan liitettyjen huolinta-/rahtilaskujen summaa")."</option>";
+		$ulos .= "<option value = 'KP' {$sel["KP"]}>".t("Virallisen varastonarvon laskentaan käytetään keikalle syötettyä kuluprosenttia")."</option>";
 		$ulos .= "</select></td>";
 
 		$jatko = 0;
 	}
 
-<<<<<<< HEAD
 	if (mysql_field_name($result, $i) == 'varaston_splittaus') {
 		$ulos = "<td><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 400).">";
 
@@ -2874,6 +2873,4 @@
 		$jatko = 0;
 	}
 
-=======
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 ?>

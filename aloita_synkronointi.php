@@ -22,7 +22,6 @@ if ($tee == "SYNK") {
 		$table = substr($table, 0, 9);
 
 		$abulisa = preg_match("/(^|,)(avainsana\|*([\|a-zA-Z_\-]*))($|,)/i", $yhtiorow["synkronoi"], $regs);
-<<<<<<< HEAD
 
 		if ($regs[3] != "") {
 			$la = explode("|", $regs[3]);
@@ -36,18 +35,6 @@ if ($tee == "SYNK") {
 
 			$lajit .= ")";
 		}
-=======
-		$la = explode("|", $regs[3]);
-
-		$lajit  = " and laji in (";
-
-		foreach($la as  $l) {
-			$lajit .= "'$l',";
-		}
-		$lajit = substr($lajit, 0, -1);
-
-		$lajit .= ")";
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 	}
 	else {
 		if(strpos($yhtiorow["synkronoi"], $table) === false or $table == "") {
@@ -94,11 +81,7 @@ if ($tee == "SYNK") {
 		$lisa = "";
 
 		if ($table == "asiakas") {
-<<<<<<< HEAD
 			$lisa = ", maksuehto READ, toimitustapa READ";
-=======
-			$lisa = ", maksuehto READ";
->>>>>>> parent of 55cd1e4... Merge branch 'master' of git://github.com/devlab-oy/pupesoft
 		}
 
 		$query = "LOCK TABLES yhtio READ, yhtion_parametrit READ, synclog WRITE, $table WRITE $lisa";
