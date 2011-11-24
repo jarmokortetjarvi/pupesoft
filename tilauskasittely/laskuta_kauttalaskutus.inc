@@ -65,8 +65,7 @@
 				eilahetetta	= 'o',
 				ketjutus	= 'o',
 				viesti		= '$osrow[sisviesti1]',
-				rahtivapaa  = 'o',
-				kohdistettu = 'K'
+				rahtivapaa  = 'o'
 				WHERE yhtio = '$kukarow[yhtio]'
 				and tunnus = '$tilausnumero'";
 	$result = mysql_query($query) or pupe_error($query);

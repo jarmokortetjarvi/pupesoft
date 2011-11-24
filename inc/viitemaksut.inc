@@ -37,7 +37,7 @@
 
 		$currency_code = substr($tietue,75,1);
 
-		// VVKKPP
+		# Muodossa vvkkpp
 		$entry_date	  = "20".dateconv(substr($tietue,15,6));
 		$payment_date = "20".dateconv(substr($tietue,21,6));
 

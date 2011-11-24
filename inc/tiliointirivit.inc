@@ -3,13 +3,11 @@
 	// Annetaan mahdollisuus tehdä uusi tiliöinti, jos siihen on oikeus
 
 	// Onko tosite liitetty keikkaan
-	$query = "SELECT nimi, laskunro from lasku where yhtio='$kukarow[yhtio]' and tila='K' and vanhatunnus='$tunnus'";
+	$query = "SELECT laskunro from lasku where yhtio='$kukarow[yhtio]' and tila='K' and vanhatunnus='$tunnus'";
 	$keikres = pupe_query($query);
 
 	if (mysql_num_rows($keikres) > 0) {
-		$keikrow = mysql_fetch_assoc($keikres);
-
-		echo "<br><br><font class='message'>".t("Lasku on liitetty keikkaan, alv tiliöintejä ei voi muuttaa")."! ".t("Keikka").": $keikrow[nimi] / $keikrow[laskunro]</font>";
+		echo "<br><br><font class='message'>".t("Lasku on liitetty keikkaan, alv tiliöintejä ei voi muuttaa")."!</font>";
 	}
 
 	if (!isset($alv_tili))	$alv_tili = "";
@@ -317,7 +315,7 @@
 			elseif ($trow['liitos'] == "T") {
 				$taulu = "toimi";
 			}
-			else {
+			else {				
 				$taulu = "SQLERROR";
 			}
 

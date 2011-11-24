@@ -420,7 +420,7 @@
 				$kirjain 	= "U";
 				$aputyyppi 	= 1;
 				$tilikarttataso = "ulkoinen_taso";
-				$luku_kerroin = 1;				
+				$luku_kerroin = 1;
 			}
 			elseif ($tyyppi == "2") {
 				// Vastattavaa Velat
@@ -719,10 +719,11 @@
 					$kaudet[] = $headed;
 				}
 
-				// budjettivertailu
-				if ($vertailubu != "") {
-					$alkuquery1 .= " ,(SELECT sum(budjetti.summa) FROM budjetti USE INDEX (yhtio_taso_kausi) WHERE budjetti.yhtio = tili.yhtio and budjetti.tyyppi = '$kirjain' and BINARY budjetti.taso = BINARY tili.$tilikarttataso and budjetti.kausi = '$bukausi' $bulisa) 'budj $headny'\n";
-					$alkuquery2 .= " ,(SELECT sum(budjetti.summa) FROM budjetti USE INDEX (yhtio_taso_kausi) WHERE budjetti.yhtio = tili.yhtio and budjetti.tyyppi = '$kirjain' and BINARY budjetti.taso = BINARY tili.taso and budjetti.kausi = '$bukausi' $bulisa) 'budj $headny'\n";
+				// sisäisessä tuloslaskelmassa voidaan joinata budjetti
+				if ($vertailubu != "" and $kirjain == "S") {
+					$alkuquery1 .= " ,(SELECT sum(budjetti.summa) FROM budjetti USE INDEX (yhtio_taso_kausi) WHERE budjetti.yhtio = tili.yhtio and BINARY budjetti.taso = BINARY tili.$tilikarttataso and budjetti.kausi = '$bukausi' $bulisa) 'budj $headny'\n";
+					$alkuquery2 .= " ,(SELECT sum(budjetti.summa) FROM budjetti USE INDEX (yhtio_taso_kausi) WHERE budjetti.yhtio = tili.yhtio and BINARY budjetti.taso = BINARY tili.taso and budjetti.kausi = '$bukausi' $bulisa) 'budj $headny'\n";
+
 					$kaudet[] = "budj $headny";
 				}
 
@@ -749,10 +750,9 @@
 					$kaudet[] = $vkaed." - ".$vkled;
 				}
 
-				// budjettivertailu
-				if ($vertailubu != "") {
-					$alkuquery1 .= " ,(SELECT sum(budjetti.summa) FROM budjetti USE INDEX (yhtio_taso_kausi) WHERE budjetti.yhtio = tili.yhtio and budjetti.tyyppi = '$kirjain' and BINARY budjetti.taso = BINARY tili.$tilikarttataso and budjetti.kausi >= '$budjettalk' and budjetti.kausi <= '$budjettlop' $bulisa) 'budj $vka - $vkl' \n";
-					$alkuquery2 .= " ,(SELECT sum(budjetti.summa) FROM budjetti USE INDEX (yhtio_taso_kausi) WHERE budjetti.yhtio = tili.yhtio and budjetti.tyyppi = '$kirjain' and BINARY budjetti.taso = BINARY tili.taso and budjetti.kausi >= '$budjettalk' and budjetti.kausi <= '$budjettlop' $bulisa) 'budj $vka - $vkl' \n";
+				if ($vertailubu != "" and $kirjain == "S") {
+					$alkuquery1 .= " ,(SELECT sum(budjetti.summa) FROM budjetti USE INDEX (yhtio_taso_kausi) WHERE budjetti.yhtio = tili.yhtio and BINARY budjetti.taso = BINARY tili.$tilikarttataso and budjetti.kausi >= '$budjettalk' and budjetti.kausi <= '$budjettlop' $bulisa) 'budj $vka - $vkl' \n";
+					$alkuquery2 .= " ,(SELECT sum(budjetti.summa) FROM budjetti USE INDEX (yhtio_taso_kausi) WHERE budjetti.yhtio = tili.yhtio and BINARY budjetti.taso = BINARY tili.taso and budjetti.kausi >= '$budjettalk' and budjetti.kausi <= '$budjettlop' $bulisa) 'budj $vka - $vkl' \n";
 					$kaudet[] = "budj ".$vka." - ".$vkl;
 				}
 			}
@@ -830,7 +830,6 @@
 						JOIN budjetti tili ON (tili.yhtio = budjetti.yhtio and tili.tunnus = budjetti.tunnus)
 						LEFT JOIN tiliointi USE INDEX (PRIMARY) ON (tiliointi.tunnus = 0)
 						WHERE budjetti.yhtio = '$kukarow[yhtio]'
-						AND budjetti.tyyppi = '$kirjain'
 						$bulisa
 						GROUP BY budjetti.taso, groupsarake
 						ORDER BY budjetti.taso, groupsarake";
@@ -1402,7 +1401,11 @@
 						}
 						elseif ($pi > 2) {
 
-							if (isset($teexls) and $teexls == "OK") $worksheet->writeNumber($excelrivi, $pi-2, (float) str_replace(" ","",str_replace(",",".", $arvo)));
+							if (is_numeric($arvo)) {
+								$arvo = number_format($arvo, $desi, '.', '');
+							}
+
+							if (isset($teexls) and $teexls == "OK") $worksheet->writeNumber($excelrivi, $pi-2, $arvo);
 
 							if (isset($teepdf) and $teepdf == "OK") {
 								$oikpos = $pdf->strlen($arvo, $p);

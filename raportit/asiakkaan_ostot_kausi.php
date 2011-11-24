@@ -1,8 +1,6 @@
 <?php
-
-//* Tämä skripti käyttää slave-tietokantapalvelinta *//
+///* Tämä skripti käyttää slave-tietokantapalvelinta *///
 $useslave = 1;
-
 require ("../inc/parametrit.inc");
 
 echo "<font class='head'>".t("Asiakkaan/Osaston ostot annetulta kaudelta")."</font><hr>";
@@ -20,13 +18,13 @@ if ($row["ero"] > 366) {
 }
 
 if ($tee == 'go') {
-
+	
 	if (isset($muutparametrit)) {
 		list($vva,$kka,$ppa,$vvl,$kkl,$ppl) = explode('#', $muutparametrit);
 	}
 
 	$muutparametrit = $vva."#".$kka."#".$ppa."#".$vvl."#".$kkl."#".$ppl."#";
-
+	
 	$evva = $vva-1;
 	$evvl	= $vvl-1;
 	$eapvm = $evva."-".$kka."-".$ppa;
@@ -36,7 +34,7 @@ if ($tee == 'go') {
 	$lpvm = $vvl."-".$kkl."-".$ppl;
 
 	echo "<br>".t("Annetut rajaukset").": $ytunnus $asosasto $apvm $lpvm<br><br>";
-
+	
 	$ok = '';
 
 	if ($ytunnus != '') {
@@ -45,11 +43,11 @@ if ($tee == 'go') {
 		}
 		$ok++;
 	}
-
+	
 	if ($asosasto != '') {
 		$ok++;
 	}
-
+	
 	if ($ytunnus != '' and $ok == 1 and $asiakasid != '') {
 		$query = "SELECT t.tuoteno, t.nimitys,
 					sum(if(t.laskutettuaika >= '$apvm' and t.laskutettuaika <= '$lpvm',t.rivihinta,0)) summa,

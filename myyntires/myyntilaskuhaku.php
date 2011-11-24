@@ -1,7 +1,6 @@
 <?php
 
-	//* Tämä skripti käyttää slave-tietokantapalvelinta *//
-	$useslave = 1;
+	$useslave = 1; // käytetään slavea
 
 	// DataTables päälle
 	$pupe_DataTables = "myyntilaskuhaku";

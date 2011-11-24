@@ -47,7 +47,7 @@
 						filename   = '$filename',
 						filesize   = '$filesize',
 						filetype   = '$filetype'";
-			$result = pupe_query($query);
+			$result = mysql_query($query) or pupe_error($query);
 			$liitostunnus = mysql_insert_id();
 			$fnimi = $liitostunnus;
 		}
@@ -155,7 +155,7 @@
 					tila = 'X',
 					laatija = '$kukarow[kuka]',
 					luontiaika = now()";
-		$result = pupe_query($query);
+		$result = mysql_query($query) or pupe_error($query);
 		$tunnus = mysql_insert_id($link);
 		$turvatunnus = $tunnus;
 
@@ -165,7 +165,7 @@
 						liitostunnus = '$tunnus',
 						selite = '$selite $summa'
 						WHERE tunnus = '$fnimi'";
-			$result = pupe_query($query);
+			$result = mysql_query($query) or pupe_error($query);
 		}
 
 		$totsumma = 0;
@@ -203,14 +203,14 @@
 							tila = 'X',
 							laatija = '$kukarow[kuka]',
 							luontiaika = now()";
-				$result = pupe_query($query);
+				$result = mysql_query($query) or pupe_error($query);
 				$tunnus = mysql_insert_id ($link);
 
 				if (!empty($fnimi)) {
 
 					// kopioidaan liitetiedosto toiselta rivilt‰
 					$query = "SELECT * from liitetiedostot where tunnus='$fnimi'";
-					$res = pupe_query($query);
+					$res = mysql_query($query) or pupe_error($query);
 					$liite = mysql_fetch_assoc($res);
 
 					// n‰m‰ arvot vaihdetaan ainoastaan
@@ -224,7 +224,7 @@
 					}
 
 					$ins = "INSERT into liitetiedostot set " . implode(', ', $cols);
-					pupe_query($ins);
+					mysql_query($ins) or pupe_error($ins);
 
 					$fnimi = '';
 				}
@@ -292,7 +292,7 @@
 						WHERE konserni = '$yhtiorow[konserni]'
 						AND trim(konserni) != ''
 						AND yhtio != '$kukarow[yhtio]'";
-			$yresult = pupe_query($query);
+			$yresult = mysql_query($query) or pupe_error($query);
 
 			if (mysql_num_rows($yresult) < 1) {
 				echo "<font class='error'>".t("Konsernissasi ei ole yht‰‰n yrityst‰. N‰in ollen et voi k‰ytt‰‰ t‰t‰ toimintoa")."</font>";
@@ -419,7 +419,7 @@
 									FROM tili
 									WHERE yhtio = '$kukarow[yhtio]'
 									AND tilino = '$itili[$i]'";
-						$vresult = pupe_query($query);
+						$vresult = mysql_query($query) or pupe_error($query);
 
 						if (mysql_num_rows($vresult) == 1) {
 							$vrow = mysql_fetch_array($vresult);
@@ -439,7 +439,7 @@
 							and tyyppi = 'K'
 							and kaytossa != 'E'
 							ORDER BY koodi+0, koodi, nimi";
-				$vresult = pupe_query($query);
+				$vresult = mysql_query($query) or pupe_error($query);
 
 				echo "<td><select name='ikustp[$i]'>";
 				echo "<option value =' '>".t("Ei kustannuspaikkaa");
@@ -460,7 +460,7 @@
 							and tyyppi = 'O'
 							and kaytossa != 'E'
 							ORDER BY koodi+0, koodi, nimi";
-				$vresult = pupe_query($query);
+				$vresult = mysql_query($query) or pupe_error($query);
 
 				echo "<select name='ikohde[$i]'>";
 				echo "<option value =' '>".t("Ei kohdetta");
@@ -481,7 +481,7 @@
 							and tyyppi = 'P'
 							and kaytossa != 'E'
 							ORDER BY koodi+0, koodi, nimi";
-				$vresult = pupe_query($query);
+				$vresult = mysql_query($query) or pupe_error($query);
 
 				echo "<select name='iprojekti[$i]'>";
 				echo "<option value =' '>".t("Ei projektia");

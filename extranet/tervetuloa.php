@@ -9,7 +9,7 @@ if ($tee == 'TUOTE' and $kukarow['extranet'] != "") {
 	// haetaan avoimen tilauksen otsikko
 	if ($kukarow["kesken"] != 0) {
 		$query    = "SELECT * from lasku where yhtio='$kukarow[yhtio]' and tunnus='$kukarow[kesken]'";
-		$laskures = pupe_query($query);
+		$laskures = mysql_query($query);
 	}
 	else {
 		// Luodaan uusi myyntitilausotsikko
@@ -20,7 +20,7 @@ if ($tee == 'TUOTE' and $kukarow['extranet'] != "") {
 
 		// haetaan avoimen tilauksen otsikko
 		$query    = "SELECT * from lasku where yhtio='$kukarow[yhtio]' and tunnus='$kukarow[kesken]'";
-		$laskures = pupe_query($query);
+		$laskures = mysql_query($query);
 	}
 
 	if ($kukarow["kesken"] != 0 and $laskures != '') {
@@ -28,16 +28,16 @@ if ($tee == 'TUOTE' and $kukarow['extranet'] != "") {
 		$laskurow = mysql_fetch_array($laskures);
 	}
 
-	echo "<font class='message'>".t("Lisätään tuotteita tilaukselle")." $kukarow[kesken].</font><br>";
+	echo "<font class='message'>Lisätään tuotteita tilaukselle $kukarow[kesken].</font><br>";
 
 	$kpl = 1;
 
 	// haetaan tuotteen tiedot
 	$query    = "SELECT * from tuote where yhtio='$kukarow[yhtio]' and tuoteno='$tuoteno'";
-	$tuoteres = pupe_query($query);
+	$tuoteres = mysql_query($query);
 
 	if (mysql_num_rows($tuoteres) == 0) {
-		echo "<font class='error'>".t("Tuotetta")." $tuoteno ".t("ei löydy")."!</font><br>";
+		echo "<font class='error'>Tuotetta $tuoteno ei löydy!</font><br>";
 	}
 	else {
 		// tuote löytyi ok, lisätään rivi
@@ -104,14 +104,13 @@ if ($tee == 'TUOTE' and $kukarow['extranet'] != "") {
 if ($tee == '') {
 
 	if ($kukarow['saatavat'] <= 1) {
-		$query = "	SELECT ytunnus, tunnus
+		$query = "	SELECT ytunnus
 					FROM asiakas
 					WHERE yhtio = '$kukarow[yhtio]' and tunnus = '$kukarow[oletus_asiakas]' LIMIT 1";
-		$result = pupe_query($query);
+		$result = mysql_query($query) or pupe_error($query);
 		$sytunnusrow = mysql_fetch_array($result);
 
-		$sytunnus		= $sytunnusrow['ytunnus'];
-		$sliitostunnus	= $sytunnusrow['tunnus'];
+		$sytunnus = $sytunnusrow['ytunnus'];
 		$eiliittymaa = 'ON';
 
 		require ("saatanat.php");
@@ -152,7 +151,7 @@ if ($tee == '') {
 				order by kokopaiva desc, pvmalku desc, kalenteri.tunnus desc
 				$limit";
 
-	$result = pupe_query($query);
+	$result = mysql_query($query) or pupe_error($query);
 
 	if (mysql_num_rows($result)>0) {
 
@@ -209,7 +208,7 @@ if ($tee == '') {
 					$query = "	SELECT *
 					 			FROM tuote
 								WHERE yhtio = '$kukarow[yhtio]' and tuoteno = '$m[1]'";
-					$tres = pupe_query($query);
+					$tres = mysql_query($query) or pupe_error($query);
 
 					//	Tämä me korvataan aina!
 					$search[] = "/$m[0]/";
@@ -243,7 +242,7 @@ if ($tee == '') {
 										and ((alkupvm <= current_date and if(loppupvm = '0000-00-00','9999-12-31',loppupvm) >= current_date) or (alkupvm='0000-00-00' and loppupvm='0000-00-00'))
 										ORDER BY ifnull(to_days(current_date)-to_days(alkupvm),9999999999999)
 										LIMIT 1";
-							$hintaresult = pupe_query($query);
+							$hintaresult = mysql_query($query) or pupe_error($query);
 
 							if (mysql_num_rows($hintaresult) > 0) {
 								$hintarow = mysql_fetch_array($hintaresult);
@@ -259,7 +258,7 @@ if ($tee == '') {
 											and ((alkupvm <= current_date and if(loppupvm = '0000-00-00','9999-12-31',loppupvm) >= current_date) or (alkupvm='0000-00-00' and loppupvm='0000-00-00'))
 											ORDER BY ifnull(to_days(current_date)-to_days(alkupvm),9999999999999)
 											LIMIT 1";
-								$hintaresult = pupe_query($query);
+								$hintaresult = mysql_query($query) or pupe_error($query);
 
 								if (mysql_num_rows($hintaresult) > 0) {
 									$hintarow = mysql_fetch_array($hintaresult);
@@ -340,7 +339,7 @@ if ($tee == "PRINTTAA") {
 				where tyyppi='uutinen'
 				and kalenteri.yhtio='$kukarow[yhtio]'
 				and kalenteri.tunnus='$tun'";
-	$result = pupe_query($query);
+	$result = mysql_query($query) or pupe_error($query);
 	$row = mysql_fetch_array($result);
 
 	/*

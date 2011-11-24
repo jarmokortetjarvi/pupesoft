@@ -1,8 +1,5 @@
 <?php
 
-	//* T‰m‰ skripti k‰ytt‰‰ slave-tietokantapalvelinta *//
-	$useslave = 1;
-
 	require("../inc/parametrit.inc");
 
 	print "<font class='head'>".t("Maksuvalmius")."</font><hr>";
@@ -16,7 +13,7 @@
 	if ($aika == 'kk') {
 		$sel3 = "SELECTED";
 	}
-
+	
 	if ($konserni != '') {
 		$sel4 = "CHECKED";
 	}
@@ -41,7 +38,7 @@
 			</form>";
 
 	if ($tee == "1") {
-
+		
 		if ($konserni == 'on') {
 			// haetaan konsernin kaikki yhtiot ja tehd‰‰n mysql lauseke
 			$query = "SELECT yhtio from yhtio where konserni='$yhtiorow[konserni]' and konserni != ''";
@@ -57,7 +54,7 @@
 			if ($yhtio == "") {
 				$yhtio = "'$kukarow[yhtio]'";
 			}
-
+			
 			// Tehd‰‰n alkusiivous!
 			$query = "	SELECT konserni
 						FROM yhtio
@@ -123,13 +120,13 @@
 		echo "<tr><th>".t("Pvm")."</th><th>".t("Myyntireskontra")."</th><th>".t("Ostoreskontra")."</th><th>".t("Yhteens‰")."</th><th>".t("Kumulatiivinen")."</th><th>".t("Ostotilauksen arvo")."</th></tr>";
 
 		$kumu = 0;
-
+		
 		while ($rivi = mysql_fetch_array($result)) {
-
+			
 			// summaillaan yhteens‰ ja kumulatiivinen
 			$yht   = $rivi["myynti"] + $rivi["osto"];
 			$kumu += $yht;
-
+			
 			// ja ruudulle
 			echo "<tr>";
 			echo "<td>$rivi[olmapvm]</td>";
@@ -146,8 +143,8 @@
 			echo "</tr>";
 		}
 
-		echo "</table>";
+		echo "</table>";		
 	}
-
+	
 	require("../inc/footer.inc");
 ?>

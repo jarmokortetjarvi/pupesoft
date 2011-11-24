@@ -1,8 +1,5 @@
 <?php
 
-	//* Tämä skripti käyttää slave-tietokantapalvelinta *//
-	$useslave = 1;
-
 	echo "<font class='head'>".t("ABC-Analyysiä: ABC-pitkälistaus")."<hr></font>";
 
 	if ($toim == "kulutus") {

@@ -18,7 +18,7 @@
 						and otunnus = '$otunnus'
 						and tyyppi != 'D'
 						$tilrivilisa";
-			$copresult = pupe_query($query);
+			$copresult = mysql_query($query) or pupe_error($query);
 
 			if (mysql_num_rows($copresult) == 0) {
 				$tilauksesta_myyntitilaus = t("Tarjouksella ei ollut yht‰‰n laskutettavaa rivi‰");
@@ -27,7 +27,7 @@
 
 			//Kopioidaan otsikko ja siirret‰‰n rivit uudelle otsikolle
 			$query = "SELECT * FROM lasku WHERE tunnus='$otunnus' and yhtio ='$kukarow[yhtio]'";
-			$monistares = pupe_query($query);
+			$monistares = mysql_query($query) or pupe_error($query);
 			$monistarow = mysql_fetch_array($monistares);
 
 			$fields = mysql_field_name($monistares,0);
@@ -118,28 +118,28 @@
 
 			if ($perusta == "PROJEKTI" and $monistarow["tunnusnippu"] > 0 and $monistarow["tila"] == "T") {
 				$kysely  = "INSERT into lasku ($fields) VALUES ($values)";
-				$insres  = pupe_query($kysely);
+				$insres  = mysql_query($kysely) or pupe_error($kysely);
 				$ptunnus = mysql_insert_id();
 
 				$kysely = "UPDATE lasku SET tunnusnippu='$ptunnus', tila='R', alatila='' WHERE yhtio='$kukarow[yhtio]' and tunnus='$ptunnus'";
-				$updres=pupe_query($kysely);
+				$updres=mysql_query($kysely) or pupe_error($kysely);
 
 				// avataan projekti kirjanpitoon
 				$query = " INSERT into kustannuspaikka set yhtio  = '$kukarow[yhtio]', nimi = '$ptunnus - $monistarow[nimi]', tyyppi = 'P', kaytossa = 'o', luontiaika = now(), laatija = '$kukarow[kuka]'";
-				$result = pupe_query($query);
+				$result = mysql_query($query) or pupe_error($query);
 				$projekti = mysql_insert_id();
 
 				$tilauksesta_myyntitilaus = "<font class='message'>".t("PERUSTETTIIN PROJEKTI").": $ptunnus</font><br><br>";
 			}
 
 			$kysely  = "INSERT into lasku ($fields) VALUES ($values)";
-			$insres  = pupe_query($kysely);
+			$insres  = mysql_query($kysely) or pupe_error($kysely);
 			$utunnus = mysql_insert_id();
 
 			if ($perusta == "TYOMAARAYS") {
 				// Kopioidaan tyˆm‰‰r‰ys
 				$query = "SELECT * FROM tyomaarays WHERE otunnus='$otunnus' and yhtio ='$kukarow[yhtio]'";
-				$monistatyomres = pupe_query($query);
+				$monistatyomres = mysql_query($query) or pupe_error($query);
 				$monistatyomrow = mysql_fetch_array($monistatyomres);
 
 				$fields = mysql_field_name($monistatyomres,0);
@@ -165,7 +165,7 @@
 				}
 
 				$kysely  = "INSERT into tyomaarays ($fields) VALUES ($values)";
-				$insres  = pupe_query($kysely);
+				$insres  = mysql_query($kysely) or pupe_error($kysely);
 			}
 
 			/*
@@ -183,12 +183,12 @@
 				}
 
 				$query = "UPDATE lasku set tunnusnippu = '$tunnusnippu' WHERE yhtio = '$kukarow[yhtio]' and tunnus='$utunnus'";
-				$updres = pupe_query($query);
+				$updres = mysql_query($query) or pupe_error($query);
 			}
 
 			//Kopioidaan otsikon lisatiedot
 			$query = "SELECT * FROM laskun_lisatiedot WHERE otunnus='$otunnus' and yhtio ='$kukarow[yhtio]'";
-			$monistares2 = pupe_query($query);
+			$monistares2 = mysql_query($query) or pupe_error($query);
 			$monistarow2 = mysql_fetch_array($monistares2);
 
 			$fields = mysql_field_name($monistares2,0);
@@ -227,11 +227,11 @@
 			}
 
 			$kysely  = "INSERT into laskun_lisatiedot ($fields) VALUES ($values)";
-			$insres2 = pupe_query($kysely);
+			$insres2 = mysql_query($kysely) or pupe_error($kysely);
 
 			if ($ptunnus > 0) {
 				$kysely  = "INSERT into laskun_lisatiedot ($fields) VALUES ($pvalues)";
-				$insres2 = pupe_query($kysely);
+				$insres2 = mysql_query($kysely) or pupe_error($kysely);
 
 				if ($yhtiorow["dokumentaatiohallinta"] != "") {
 					svnOpenNew($ptunnus, "PROJEKTI");
@@ -258,21 +258,21 @@
 						FROM maksupositio
 						WHERE yhtio = '$kukarow[yhtio]'
 						and otunnus = '$otunnus'";
-			$copresult = pupe_query($query);
+			$copresult = mysql_query($query) or pupe_error($query);
 
 			if (mysql_num_rows($copresult) > 0) {
 				$query = "	UPDATE maksupositio
 							SET otunnus = '$mtunnus'
 							WHERE yhtio = '$kukarow[yhtio]'
 							and otunnus = '$otunnus'";
-				$result = pupe_query($query);
+				$result = mysql_query($query) or pupe_error($query);
 
 				//P‰ivitet‰‰n lasku
 				$query = "	UPDATE lasku
 							SET jaksotettu 	= '$mtunnus'
 							WHERE yhtio 	= '$kukarow[yhtio]'
 							and tunnus 		= '$utunnus'";
-				$result = pupe_query($query);
+				$result = mysql_query($query) or pupe_error($query);
 
 				//	P‰ivitet‰‰n projekti
 				if ($ptunnus > 0) {
@@ -280,7 +280,7 @@
 								SET jaksotettu 	= '$mtunnus'
 								WHERE yhtio 	= '$kukarow[yhtio]'
 								and tunnus 		= '$ptunnus'";
-					$result = pupe_query($query);
+					$result = mysql_query($query) or pupe_error($query);
 				}
 			}
 
@@ -290,7 +290,7 @@
 						where yhtio			= '$kukarow[yhtio]'
 						and liitostunnus	= '$otunnus'
 						and liitos			= 'lasku'";
-			$liiteres = pupe_query($query);
+			$liiteres = mysql_query($query) or pupe_error($query);
 
 			if (mysql_num_rows($liiteres) > 0) {
 
@@ -316,7 +316,7 @@
 							  	jarjestys		= '$liiterow[jarjestys]',
 							  	laatija			= '$kukarow[kuka]',
 							  	luontiaika		= now()";
-					$liiteinsres = pupe_query($query);
+					$liiteinsres = mysql_query($query) or pupe_error($query);
 				}
 			}
 
@@ -348,7 +348,7 @@
 						and tilausrivi.tyyppi != 'D'
 						$tilrivilisa
 						ORDER by tilausrivi.perheid2, tilausrivi.perheid, tilausrivi.tunnus";
-			$copresult = pupe_query($query);
+			$copresult = mysql_query($query) or pupe_error($query);
 
 			while ($coprivirow = mysql_fetch_array($copresult)) {
 
@@ -356,7 +356,7 @@
 							FROM tuote
 							WHERE yhtio  = '$kukarow[yhtio]'
 							and  tuoteno = '$coprivirow[tuoteno]'";
-				$aresult = pupe_query($query);
+				$aresult = mysql_query($query) or pupe_error($query);
 				$tuoterow = mysql_fetch_assoc($aresult);
 
 				$tuoteno = $coprivirow['tuoteno'];
@@ -453,7 +453,7 @@
 								FROM tilausrivi
 								WHERE yhtio = '$kukarow[yhtio]'
 								and tunnus = '".$isaok[$coprivirow['perheid2']]."'";
-					$aresult = pupe_query($query);
+					$aresult = mysql_query($query) or pupe_error($query);
 					$paikkarow = mysql_fetch_assoc($aresult);
 
 					$paikka = $paikkarow["paikka"];
@@ -463,7 +463,7 @@
 				$jtkielto 		 	= $laskurow['jtkielto'];
 
 				$query = "SELECT * FROM tuote WHERE yhtio='$kukarow[yhtio]' and tuoteno='$coprivirow[tuoteno]'";
-				$tuote_result = pupe_query($query);
+				$tuote_result = mysql_query($query) or pupe_error($query);
 				$trow = mysql_fetch_array($tuote_result);
 
 				$tilauksesta_myyntitilaus .= "<font class='message'>Lis‰t‰‰n rivi $tuoteno $kpl kpl tilaukselle $utunnus</font><br>";
@@ -497,7 +497,7 @@
 								and sarjanumeroseuranta.tuoteno = '$coprivirow[tuoteno]'
 								and sarjanumeroseuranta.$lisax  = '$coprivirow[tunnus]'
 								group by $lisax";
-					$sarjares = pupe_query($query);
+					$sarjares = mysql_query($query) or pupe_error($query);
 					$sarjarow = mysql_fetch_array($sarjares);
 
 					foreach($lisatyt_rivit as $lisatty_tun) {
@@ -506,7 +506,7 @@
 									WHERE yhtio = '$kukarow[yhtio]'
 									and otunnus = '$utunnus'
 									and tunnus  = '$lisatty_tun'";
-						$lisres = pupe_query($query);
+						$lisres = mysql_query($query) or pupe_error($query);
 						$lisrow = mysql_fetch_array($lisres);
 
 						if ($lisrow["varattu"] != 0) {
@@ -518,14 +518,14 @@
 										and sarjanumeroseuranta.tuoteno = '$coprivirow[tuoteno]'
 										and sarjanumeroseuranta.$lisax  = '$coprivirow[tunnus]'
 										LIMIT $lisrow[varattu]";
-							$cores = pupe_query($query);
+							$cores = mysql_query($query) or pupe_error($query);
 						}
 
 						//Kopioidaan tilausrivin lisatiedot
 						$query = "	SELECT *
 									FROM tilausrivin_lisatiedot
 									WHERE tilausrivitunnus = '$coprivirow[tunnus]' and yhtio = '$kukarow[yhtio]'";
-						$monistares2 = pupe_query($query);
+						$monistares2 = mysql_query($query) or pupe_error($query);
 
 						if (mysql_num_rows($monistares2) > 0) {
 							$monistarow2 = mysql_fetch_array($monistares2);
@@ -550,7 +550,7 @@
 
 							$kysely  = substr($kysely, 0, -1);
 							$kysely .= " WHERE yhtio='$kukarow[yhtio]' and tilausrivitunnus='$lisrow[tunnus]'";
-							$insres2 = pupe_query($kysely);
+							$insres2 = mysql_query($kysely) or pupe_error($kysely);
 						}
 					}
 
@@ -560,7 +560,7 @@
 								WHERE sarjanumeroseuranta.yhtio = '$kukarow[yhtio]'
 								and sarjanumeroseuranta.tuoteno = '$coprivirow[tuoteno]'
 								and sarjanumeroseuranta.$lisax  = '$coprivirow[tunnus]'";
-					$cores = pupe_query($query);
+					$cores = mysql_query($query) or pupe_error($query);
 				}
 			}
 
@@ -571,7 +571,7 @@
 						and otunnus = '$utunnus'
 						and perheid != 0
 						GROUP by perheid";
-			$copresult = pupe_query($query);
+			$copresult = mysql_query($query) or pupe_error($query);
 
 			while ($coprivirow = mysql_fetch_array($copresult)) {
 				$query = "	UPDATE tilausrivi
@@ -579,7 +579,7 @@
 							WHERE yhtio = '$kukarow[yhtio]'
 							and otunnus = '$utunnus'
 							and perheid = '$coprivirow[perheid]'";
-				$cores = pupe_query($query);
+				$cores = mysql_query($query) or pupe_error($query);
 			}
 
 			//Korjataan perheid2:t uusilla riveill‰
@@ -589,7 +589,7 @@
 						and otunnus = '$utunnus'
 						and perheid2 != 0
 						GROUP by perheid2";
-			$copresult = pupe_query($query);
+			$copresult = mysql_query($query) or pupe_error($query);
 
 			while ($coprivirow = mysql_fetch_array($copresult)) {
 				$query = "	UPDATE tilausrivi
@@ -597,7 +597,7 @@
 							WHERE yhtio = '$kukarow[yhtio]'
 							and otunnus = '$utunnus'
 							and perheid2 = '$coprivirow[perheid2]'";
-				$cores = pupe_query($query);
+				$cores = mysql_query($query) or pupe_error($query);
 			}
 
 			//Jos kyseess‰ on laskutettava myyntitili
@@ -607,13 +607,13 @@
 							SET eilahetetta = 'o'
 							where yhtio = '$kukarow[yhtio]'
 							and tunnus = '$kukarow[kesken]'";
-				$result = pupe_query($query);
+				$result = mysql_query($query) or pupe_error($query);
 
 				$query 	= "	SELECT *
 							from lasku
 							where tunnus = '$kukarow[kesken]'
 							and yhtio = '$kukarow[yhtio]'";
-				$result  	= pupe_query($query);
+				$result  	= mysql_query($query) or pupe_error($query);
 				$laskurow   = mysql_fetch_array($result);
 
 				require("tilaus-valmis.inc");

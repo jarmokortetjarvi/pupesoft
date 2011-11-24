@@ -1,8 +1,5 @@
 <?php
 
-	//* Tämä skripti käyttää slave-tietokantapalvelinta *//
-	$useslave = 1;
-
 	require ("inc/parametrit.inc");
 
 	js_popup();

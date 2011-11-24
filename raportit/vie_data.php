@@ -1,8 +1,5 @@
 <?php
 
-	//* T‰m‰ skripti k‰ytt‰‰ slave-tietokantapalvelinta *//
-	$useslave = 1;
-
 	require "inc/parametrit.inc";
 
 echo "<font class='head'>Tallenna taulu: </font><hr>";
@@ -17,13 +14,13 @@ echo "<font class='head'>Tallenna taulu: </font><hr>";
 
 	$var1	= '';
 
-
+	
 
 
 
 if ($tee=='UV') {
 
-
+	
 
 	//tarkastellaan rajataanko hakua kent‰ll‰
 
@@ -51,11 +48,11 @@ if ($tee=='UV') {
 
 	}
 
+	
 
+	
 
-
-
-
+	
 
 
 
@@ -77,17 +74,17 @@ if ($tee=='UV') {
 
 		$y	= 1;
 
+	
 
+		if ($row[0]=='yhtio') { 
 
-		if ($row[0]=='yhtio') {
-
-			$y=0;
+			$y=0; 
 
 			}
 
-		if ($row[0]=='tunnus') {
+		if ($row[0]=='tunnus') { 
 
-			$y=0;
+			$y=0; 
 
 			}
 
@@ -115,9 +112,9 @@ if ($tee=='UV') {
 
 	}
 
+	
 
-
-
+	
 
 	//sitten kysell‰‰n haetun kannan tiedot ja pusketaan ne tiedostoon
 
@@ -133,7 +130,7 @@ if ($tee=='UV') {
 
 	$result2 =  mysql_query($query2);
 
-
+	
 
 	while ($row2=mysql_fetch_array($result2)) {
 
@@ -145,7 +142,7 @@ if ($tee=='UV') {
 
 		$result =  mysql_query($query);
 
-
+		
 
 			while ($row=mysql_fetch_array($result)) {
 
@@ -157,23 +154,23 @@ if ($tee=='UV') {
 
 				$y	= 1;
 
+	
 
+				if ($row[0]=='yhtio') { 
 
-				if ($row[0]=='yhtio') {
-
-					$y=0;
-
-				}
-
-				if ($row[0]=='tunnus') {
-
-					$y=0;
+					$y=0; 
 
 				}
 
+				if ($row[0]=='tunnus') { 
+
+					$y=0; 
+
+				}
 
 
 
+		
 
 				if ($y==1) {
 
@@ -193,7 +190,7 @@ if ($tee=='UV') {
 
 				}
 
-		}
+		}	
 
 
 
@@ -207,11 +204,11 @@ if ($tee=='UV') {
 
 
 
-		if (fwrite($fh, $rivivie) === FALSE) die("Tiedoston kirjoitus ep‰onnistui!");
+		if (fwrite($fh, $rivivie) === FALSE) die("Tiedoston kirjoitus ep‰onnistui!");	
 
 
 
-
+		
 
 
 
@@ -235,7 +232,7 @@ if ($tee=='UV') {
 
 
 
-
+		
 
 
 

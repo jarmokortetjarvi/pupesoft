@@ -242,7 +242,7 @@
 									}
 
 									echo "<tr><td><input type='checkbox' name='mul_kay[]' value='tk' {$mul_check}></td><td nowrap>",t("Tuotekuva"),"</td></tr>";
-
+									
 									$mul_check = '';
 									if (count($mul_kay) > 0) {
 										if (in_array('hr', $mul_kay)) {
@@ -251,7 +251,7 @@
 									}
 
 									echo "<tr><td><input type='checkbox' name='mul_kay[]' value='hr' {$mul_check}></td><td nowrap>",t("Painokuva"),"</td></tr>";
-
+									
 									$mul_check = '';
 									if (count($mul_kay) > 0) {
 										if (in_array('mu', $mul_kay)) {
@@ -283,7 +283,7 @@
 									}
 
 									echo "<tr><td><input type='checkbox' name='nayta_tk' value='naytetaan' {$mul_check}></td><td nowrap>",t("Tuotekuvat"),"</td></tr>";
-
+									
 									$mul_check = '';
 									if ($nayta_hr != '') {
 										if ($nayta_hr == 'naytetaan') {
@@ -292,8 +292,8 @@
 									}
 
 									echo "<tr><td><input type='checkbox' name='nayta_hr' value='naytetaan' {$mul_check}></td><td nowrap>",t("Painokuvat"),"</td></tr>";
-
-
+									
+									
 									$mul_check = '';
 									if ($nayta_th != '') {
 										if ($nayta_th == 'naytetaan') {
@@ -554,13 +554,15 @@
 							AND liitos = 'tuote'
 							AND filename != ''
 							AND filetype = '$filetype'";
-				$result = pupe_query($query);
+				$result = mysql_query($query) or pupe_error($query);
 			}
+
+
 		}
 
 		if ($tee == 'LISTAA') {
 
-			//* T‰m‰ skripti k‰ytt‰‰ slave-tietokantapalvelinta *//
+			// k‰ytet‰‰n slavea
 			$useslave = 1;
 
 			require('inc/connect.inc');
@@ -688,7 +690,7 @@
 						WHERE tuote.yhtio 	= '$kukarow[yhtio]'
 						$lisa
 						ORDER BY $orderlisa";
-			$result = pupe_query($query);
+			$result = mysql_query($query) or pupe_error($query);
 
 			// scripti balloonien tekemiseen
 			js_popup();

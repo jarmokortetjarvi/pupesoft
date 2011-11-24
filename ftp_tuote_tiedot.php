@@ -1,8 +1,5 @@
 <?php
 
-//* Tämä skripti käyttää slave-tietokantapalvelinta *//
-$useslave = 1;
-
 // Kutsutaanko CLI:stä
 $php_cli = FALSE;
 
@@ -242,7 +239,7 @@ if ($tee == "aja") {
 					substring(ta_nimitys_en.selite,1,1024), substring(ta_kuvaus_en.selite,1,1024), substring(ta_nimitys_ru.selite,1,1024), substring(ta_kuvaus_ru.selite,1,1024),
 					substring(ta_nimitys_ee.selite,1,1024), substring(ta_kuvaus_ee.selite,1,1024), substring(ta_nimitys_de.selite,1,1024), substring(ta_kuvaus_de.selite,1,1024)
 					ORDER BY tuote.tuoteno";
-		$result = pupe_query($query);
+		$result = mysql_query($query) or pupe_error($query);
 
 		$syy .= tee_file($result, $dirri, "tuotetiedot.csv",  $ftpkuvahost, $ftpkuvauser, $ftpkuvapass);
 
@@ -265,7 +262,7 @@ if ($tee == "aja") {
 					AND avainsana.kieli = 'fi'
 					AND avainsana.nakyvyys != 'E'
 					ORDER BY avainsana.jarjestys";
-		$result = pupe_query($query);
+		$result = mysql_query($query) or pupe_error($query);
 
 		$syy .= tee_file($result, $dirri, "osastot.csv",  $ftpkuvahost, $ftpkuvauser, $ftpkuvapass);
 
@@ -288,7 +285,7 @@ if ($tee == "aja") {
 					AND avainsana.kieli = 'fi'
 					AND avainsana.nakyvyys != 'E'
 					ORDER BY avainsana.jarjestys";
-		$result = pupe_query($query);
+		$result = mysql_query($query) or pupe_error($query);
 
 		$syy .= tee_file($result, $dirri, "tuoteryhmat.csv",  $ftpkuvahost, $ftpkuvauser, $ftpkuvapass);
 

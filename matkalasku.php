@@ -1096,7 +1096,7 @@ if ($tee == "TALLENNA") {
 if ($tee == "MUOKKAA") {
 
 	// Onko tosite liitetty keikkaan
-	$query = "	SELECT nimi, laskunro
+	$query = "	SELECT laskunro
 				from lasku
 				where yhtio = '$kukarow[yhtio]'
 				and tila = 'K'
@@ -1104,9 +1104,7 @@ if ($tee == "MUOKKAA") {
 	$keikres = pupe_query($query);
 
 	if (mysql_num_rows($keikres) > 0) {
-		$keikrow = mysql_fetch_assoc($keikres);
-
-		echo "<br><font class='message'>".t("Lasku on liitetty keikkaan, alv tiliöintejä ei voi muuttaa")."! ".t("Keikka").": $keikrow[nimi] / $keikrow[laskunro]</font>";
+		echo "<br><font class='message'>".t("Lasku on liitetty keikkaan, alv tiliöintejä ei voi muuttaa")."!</font><br><br>";
 	}
 
 	if ($poistakuva > 0) {

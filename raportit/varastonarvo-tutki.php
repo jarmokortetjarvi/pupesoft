@@ -1,6 +1,6 @@
 <?php
 
-	//* Tämä skripti käyttää slave-tietokantapalvelinta *//
+	// käytetään slavea jos sellanen on
 	$useslave = 1;
 
 	require ("../inc/parametrit.inc");

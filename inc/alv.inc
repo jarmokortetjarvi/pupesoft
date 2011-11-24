@@ -100,7 +100,6 @@
 				}
 			}
 			else {
-				if (abs($trow['summa']) <= 0.02) continue;
 				$error = t("Vastaavaa automaattivientiä ei ole tai niitä on liikaa")."!";
 			}
 

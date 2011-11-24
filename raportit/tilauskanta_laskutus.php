@@ -1,6 +1,7 @@
 <?php
 
-	//* Tämä skripti käyttää slave-tietokantapalvelinta *//
+
+	// käytetään slavea
 	$useslave = 1;
 
 	if (isset($_POST["tee"])) {

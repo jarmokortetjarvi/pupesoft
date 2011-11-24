@@ -66,7 +66,6 @@ $tuotetiedot = $xml->xpath('Group25');
 $i 			 = 0;
 $rtuoteno	 = array();
 $ealvi		 = array("");
-$lisavat	 = array("");
 
 if (count($tuotetiedot) > 0) {
 	foreach ($tuotetiedot as $tuotetieto) {
@@ -114,6 +113,7 @@ if (count($tuotetiedot) > 0) {
 
 // Verotiedot
 $vattiedot	= $xml->xpath('Group50');
+$lisavat	= array("");
 $i			= 0;
 
 if (count($vattiedot) > 0) {

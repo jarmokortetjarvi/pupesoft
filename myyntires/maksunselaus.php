@@ -1,9 +1,5 @@
 <?php
-
-	//* Tämä skripti käyttää slave-tietokantapalvelinta *//
-	$useslave = 1;
-
-	require("inc/parametrit.inc");
+	include "inc/parametrit.inc";
 
 	echo "<br><font class='head'>".t("Maksujen selaus")."</font><hr>";
 

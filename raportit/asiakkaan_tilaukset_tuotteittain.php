@@ -1,8 +1,6 @@
 <?php
-
-	//* T‰m‰ skripti k‰ytt‰‰ slave-tietokantapalvelinta *//
+	///* T‰m‰ skripti k‰ytt‰‰ slave-tietokantapalvelinta *///
 	$useslave = 1;
-
 	if (isset($_POST["tee"])) {
 		if($_POST["tee"] == 'lataa_tiedosto') $lataa_tiedosto=1;
 		if($_POST["kaunisnimi"] != '') $_POST["kaunisnimi"] = str_replace("/","",$_POST["kaunisnimi"]);
@@ -182,7 +180,7 @@
 		}
 
 		if ($toim == 'OSTO') {
-
+			
 			$query_ale_lisa = generoi_alekentta('O');
 
 			$ale_query_select_lisa = generoi_alekentta_select('erikseen', 'O');
@@ -212,9 +210,9 @@
 						and tilausrivi.$pvmtapa <='$vvl-$kkl-$ppl 23:59:59'";
 		}
 		else {
-
+			
 			$query_ale_lisa = generoi_alekentta('M');
-
+			
 			if ((int) $asiakasid > 0) {
 				$asiakaslisa = "";
 			}
@@ -294,9 +292,9 @@
 			if ($toim == 'OSTO' and $pvmtapa == 'toimaika') {
 				$pvmtapa_url = "&pvmtapa=toimaika";
 			}
-
+			
 			$j = 0;
-
+			
 			for ($i=1; $i < mysql_num_fields($result)-$miinus; $i++) {
 
 				echo "<th align='left'><a href='$PHP_SELF?tee=$tee&toim=$toim&ppl=$ppl&vvl=$vvl&kkl=$kkl&ppa=$ppa&vva=$vva&kka=$kka&tuoteno=".urlencode($tuoteno)."&ytunnus=$ytunnus&asiakasid=$asiakasid&jarj=".mysql_field_name($result,$i)."$pvmtapa_url'>".t(mysql_field_name($result,$i))."</a></th>";
@@ -306,7 +304,7 @@
 				}
 
 				$j++;
-
+				
 				if (mysql_field_name($result,$i) == 'kate') {
 					echo "<th align='left'><a href='$PHP_SELF?tee=$tee&toim=$toim&ppl=$ppl&vvl=$vvl&kkl=$kkl&ppa=$ppa&vva=$vva&kka=$kka&tuoteno=".urlencode($tuoteno)."&ytunnus=$ytunnus&asiakasid=$asiakasid&jarj=".mysql_field_name($result,$i)."$pvmtapa_url'>".t("Katepros")."</a></th>";
 
@@ -314,7 +312,7 @@
 						$worksheet->write($excelrivi, $j, ucfirst(t("Katepros")), $format_bold);
 						$j++;
 					}
-				}
+				}								
 			}
 
 			if ($toim != "OSTO") {
@@ -341,7 +339,7 @@
 
 				$ero = "td";
 				if ($tunnus == $row['tilaus']) $ero = "th";
-
+				
 				if ($row["var"] == "P") {
 					$class = " class='spec' ";
 				}
@@ -365,7 +363,7 @@
 						}
 						else {
 							echo "<$ero valign='top' align='right' $class>".(float) $row[$i]."</$ero>";
-						}
+						}						
 					}
 					elseif (mysql_field_name($result,$i) == 'tuoteno') {
 						echo "<$ero valign='top' $class><a href='".$palvelin2."tuote.php?tee=Z&tuoteno=".urlencode($row[$i])."'>$row[$i]</a></$ero>";
@@ -510,8 +508,8 @@
 						$excelsarake++;
 					}
 				}
-
-				if ($row["var"] != "P" and $row["var"] != "J") {
+								
+				if ($row["var"] != "P" and $row["var"] != "J") {					
 					$kplsumma += $row["m‰‰r‰"];
 					$rivihintasumma += $row["rivihinta"];
 				}

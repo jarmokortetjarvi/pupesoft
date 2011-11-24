@@ -1,6 +1,5 @@
 <?php
-
-	//* Tämä skripti käyttää slave-tietokantapalvelinta *//
+	///* Tämä skripti käyttää slave-tietokantapalvelinta *///
 	$useslave = 1;
 
 	if (isset($_POST["tee"])) {
@@ -14,6 +13,7 @@
 		readfile("/tmp/".$tmpfilenimi);
 		exit;
 	}
+
 
 	if (isset($muutparametrit) and $muutparametrit != '') {
 		$muut = explode('/', $muutparametrit);

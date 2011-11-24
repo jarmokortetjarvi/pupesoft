@@ -1,5 +1,7 @@
 <?php
 
+	$useslave = ($_REQUEST['tee'] == 'tallenna' or $_REQUEST['tee'] == 'uusiraportti') ? '' : 1;
+
 	require ("inc/parametrit.inc");
 
 	echo "<font class='head'>".t("Tehtaan saldot")."</font><hr>";

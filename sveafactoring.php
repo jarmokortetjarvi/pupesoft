@@ -292,7 +292,9 @@
 					$where
 					ORDER BY laskunro";
 		$laskures = mysql_query ($query) or pupe_error($query);
+
 		if (mysql_num_rows($laskures) > 0) {
+
 			$laskukpl  = 0;
 			$vlaskukpl = 0;
 			$vlaskusum = 0;
@@ -469,8 +471,7 @@
 
 							$kommentti = $laskurivi['kommentti'];
 
-							$laskuri = 0;
-							while ((strlen($kommentti) > 0) and ($laskuri < 10)) {
+							while (strlen($kommentti) > 0) {
 								$ulos .= sprintf ('%-2.2s', "11"); // Record type
 								$ulos .= sprintf ('%07.7s', $frow["sopimusnumero"]);
 								$ulos .= sprintf ('%010.10s', $laskurow["laskunro"]);
@@ -481,14 +482,12 @@
 								$ulos .= sprintf ('%-9.9s', ""); // Quantity
 								$ulos .= " ";
 
+								$kommentti = $laskurivi['kommentti'];
 								$kommentti = str_replace("\r", "\n", $kommentti);
 								$kommentti = str_replace("\n", " ", $kommentti);
 
 								$ulos .= sprintf ('%-40.40s', $kommentti);
-								if (strlen($kommentti) > 40)
-									$kommentti = substr($kommentti, -40);
-								else
-									$kommentti = "";
+								$kommentti = substr($kommentti, 40, strlen($kommentti) - 40); // Poistetaan 40 merkkiä alusta
 
 								$ulos .= sprintf ('%-11.11s', "");
 								$ulos .= sprintf ('%-2.2s', "");
@@ -500,7 +499,6 @@
 								$ulos .= " ";
 								$ulos .= sprintf ('%-4.4s', ""); // Units
 								$ulos .= "\r\n";
-								$laskuri++;
 							}
 						}
 					}

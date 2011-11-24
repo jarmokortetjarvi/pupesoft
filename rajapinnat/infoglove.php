@@ -1,8 +1,5 @@
 <?php
 
-//* Tämä skripti käyttää slave-tietokantapalvelinta *//
-$useslave = 1;
-
 // Kutsutaanko CLI:stä
 if (php_sapi_name() != 'cli') {
 	die ("Tätä scriptiä voi ajaa vain komentoriviltä!");

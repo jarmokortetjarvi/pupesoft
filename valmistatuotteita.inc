@@ -571,7 +571,6 @@ if ($tee == 'UV') { //Tehd‰‰n tuotteet!
 								tilkpl 			= '$isavarattu',
 								kpl 			= '',
 								{$ale_query_insert_lisa}
-								erikoisale 		= '$tilrivirow[erikoisale]',
 								netto 			= '$tilrivirow[netto]',
 								jt 				= '',
 								yksikko 		= '$tilrivirow[yksikko]',
@@ -619,7 +618,6 @@ if ($tee == 'UV') { //Tehd‰‰n tuotteet!
 							tilkpl 			= '$isavarattu',
 							kpl 			= '$isavarattu',
 							{$ale_query_insert_lisa}
-							erikoisale 		= '$tilrivirow[erikoisale]',
 							netto 			= '$tilrivirow[netto]',
 							jt 				= '',
 							yksikko 		= '$tilrivirow[yksikko]',

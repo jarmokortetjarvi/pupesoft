@@ -367,7 +367,7 @@ if ($tee == 'GO') {
 			}
 
 			$query = "SELECT tuoteno, tunnus FROM tuote WHERE yhtio = '$kukarow[yhtio]' AND tuoteno LIKE '$kuvanalku%'";
-			$apuresult = pupe_query($query);
+			$apuresult = mysql_query($query) or pupe_error($query);
 		}
 
 		if (file_exists($file)) {
@@ -375,7 +375,7 @@ if ($tee == 'GO') {
 			$filesize = filesize($file);
 
 			$query = "SHOW variables like 'max_allowed_packet'";
-			$result = pupe_query($query);
+			$result = mysql_query($query) or pupe_error($query);
 			$paketti = mysql_fetch_array($result);
 
 			//echo "Kuvan koko:$filesize ($paketti[0]) ($paketti[1])<br>";
@@ -419,7 +419,7 @@ if ($tee == 'GO') {
 				$tuoteno = substr($kuva, 0, "$mihin");
 
 				$query = "SELECT tuoteno, tunnus FROM tuote WHERE yhtio = '$kukarow[yhtio]' AND tuoteno = '$tuoteno' LIMIT 1";
-				$apuresult = pupe_query($query);
+				$apuresult = mysql_query($query) or pupe_error($query);
 			}
 
 			if (mysql_num_rows($apuresult) > 0) {
@@ -455,7 +455,7 @@ if ($tee == 'GO') {
 								and liitostunnus 		= '$apurow[tunnus]'
 								and kayttotarkoitus 	= '$kayttotarkoitus'
 								and filename			= '$apukuva'";
-					$delresult = pupe_query($query);
+					$delresult = mysql_query($query) or pupe_error($query);
 
 					// lis‰t‰‰n uusi
 					$query = "	INSERT INTO liitetiedostot SET
@@ -476,14 +476,14 @@ if ($tee == 'GO') {
 								jarjestys			= '$jarjestys',
 								laatija				= '$kukarow[kuka]',
 								luontiaika			= now()";
-					$insre = pupe_query($query);
+					$insre = mysql_query($query) or pupe_error($query);
 
 					$query = "	UPDATE $taulu
 								SET muutospvm = now(),
 								muuttaja = '$kukarow[kuka]'
 								WHERE yhtio = '$kukarow[yhtio]'
 								and tunnus = '$apurow[tunnus]'";
-					$insre = pupe_query($query);
+					$insre = mysql_query($query) or pupe_error($query);
 
 					echo "$apurow[tuoteno] ";
 
@@ -515,7 +515,7 @@ if ($tee == 'DUMPPAA' and $mitkadumpataan != '') {
 				FROM liitetiedostot
 				WHERE yhtio = '$kukarow[yhtio]'
 				and liitos = '$mitkadumpataan'";
-	$result = pupe_query($query);
+	$result = mysql_query($query) or pupe_error($query);
 
 	$dumpattuja = 0;
 	$dellattuja = 0;
@@ -570,7 +570,7 @@ if ($tee == 'DUMPPAA' and $mitkadumpataan != '') {
 
 		if (isset($dumppaajapoista) and $dumppaajapoista == '1') {
 			$query = "DELETE FROM liitetiedostot WHERE yhtio = '$kukarow[yhtio]' and liitos = '$mitkadumpataan' and tunnus = '$row[tunnus]'";
-			$delresult = pupe_query($query);
+			$delresult = mysql_query($query) or pupe_error($query);
 			$dellattuja++;
 		}
 	}

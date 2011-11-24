@@ -1,8 +1,6 @@
 <?php
-
-	//* Tämä skripti käyttää slave-tietokantapalvelinta *//
+	///* Tämä skripti käyttää slave-tietokantapalvelinta *///
 	$useslave = 1;
-
 	require('../inc/parametrit.inc');
 
 	echo "<font class='head'>".t("Merivakuutuslistaus")."</font><hr>";
@@ -41,7 +39,7 @@
 		$yarvo	  = 0;
 		$yvakarvo = 0;
 		$yfenarvo = 0;
-
+		
 		while ($row = mysql_fetch_assoc($result)) {
 
 			echo "<tr class='aktiivi'>";
@@ -54,7 +52,7 @@
 			$kmrow = mysql_fetch_array($kmresult);
 
 			echo "<td>$kmrow[selite] - $kmrow[selitetark]</td>";
-
+			
 			if ($row["mapvm"] != "0000-00-00") {
 				// Jos virallinen varastonarvolaskenta on tehty
 				$rahtikulut = $row['saldo_maksettu'] + round($row['rahti_etu'] * $row['vienti_kurssi'], 2);

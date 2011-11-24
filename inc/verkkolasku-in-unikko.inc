@@ -7,7 +7,6 @@
 	$laskun_tyyppi 		= "UNIKKO-INVOICE";
 	$a 					= 0;
 	$ealvi		 		= array("");
-	$lisavat			= array("");
 
 	foreach ($xml->LedgerJournalTable->LedgerJournalTrans as $lasku) {
 
