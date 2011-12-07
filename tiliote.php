@@ -149,6 +149,34 @@
 					else {
 						$yritirow = mysql_fetch_array ($yritiresult);
 					}
+<<<<<<< HEAD
+=======
+
+					$query = "	SELECT myyntireskontrakausi_alku, myyntireskontrakausi_loppu, ostoreskontrakausi_alku, ostoreskontrakausi_loppu, tilikausi_alku, tilikausi_loppu
+								FROM yhtio
+								WHERE yhtio = '{$yritirow['yhtio']}'";
+					$yhtio_tsekres = pupe_query($query);
+					$yhtio_tsekrow = mysql_fetch_assoc($yhtio_tsekres);
+
+					//vertaillaan tilikauteen
+					list($vv1,$kk1,$pp1) = explode("-", $yhtio_tsekrow["myyntireskontrakausi_alku"]);
+					list($vv2,$kk2,$pp2) = explode("-", $yhtio_tsekrow["myyntireskontrakausi_loppu"]);
+
+					$myrealku  = (int) date('Ymd', mktime(0,0,0,$kk1,$pp1,$vv1));
+					$myreloppu = (int) date('Ymd', mktime(0,0,0,$kk2,$pp2,$vv2));
+
+					list($vv1,$kk1,$pp1) = explode("-", $yhtio_tsekrow["ostoreskontrakausi_alku"]);
+					list($vv2,$kk2,$pp2) = explode("-", $yhtio_tsekrow["ostoreskontrakausi_loppu"]);
+
+					$oresalku  = (int) date('Ymd', mktime(0,0,0,$kk1,$pp1,$vv1));
+					$oresloppu = (int) date('Ymd', mktime(0,0,0,$kk2,$pp2,$vv2));
+
+					list($vv1,$kk1,$pp1) = explode("-", $yhtio_tsekrow["tilikausi_alku"]);
+					list($vv2,$kk2,$pp2) = explode("-", $yhtio_tsekrow["tilikausi_loppu"]);
+
+					$tikaalku  = (int) date('Ymd', mktime(0,0,0,$kk1,$pp1,$vv1));
+					$tikaloppu = (int) date('Ymd', mktime(0,0,0,$kk2,$pp2,$vv2));
+>>>>>>> bb7562b9f0b31906cb4e8d4462e8bca3b53aba33
 
 					// Onko tämä aineisto jo ajettu?
 					$query = "	SELECT *
@@ -214,6 +242,101 @@
 					}
 				}
 
+<<<<<<< HEAD
+=======
+				// Tsekataan tiliotteen duplikaatit ja tsekataan ettei kirjata suljetuille kausille
+				if ($xtyyppi == 1 and substr($tietue, 0, 3) == "T10") {
+
+					// VVKKPP
+					$tsekpvm = (int) "20".substr($tietue, 30, 6);
+
+					if ($tsekpvm < $oresalku or $tsekpvm > $oresloppu or $tsekpvm < $myrealku or $tsekpvm > $myreloppu or $tsekpvm < $tikaalku or $tsekpvm > $tikaloppu) {
+						echo "<font class='error'>VIRHE: Aineistossa on tapahtuma ($tsekpvm) suljetulle kaudelle!</font><br>";
+
+						$xtyyppi=0;
+						$virhe++;
+					}
+
+					$arkistotunnari = substr($tietue, 12, 18);
+					$taso = substr($tietue, 187, 1);
+
+					if (($taso == ' ') and ((!is_numeric($arkistotunnari) and trim($arkistotunnari) != "") or (is_numeric($arkistotunnari) and (int) $arkistotunnari != 0))) {
+						// Katsotaan löytyykö tällä tunnuksella suoritus
+						$query = "	SELECT alku
+									FROM tiliotedata
+									WHERE yhtio	= '$yritirow[yhtio]'
+									and tilino 	= '$tilino'
+									and tyyppi 	= $xtyyppi
+									and tieto	= '$tietue'
+									and substring(tieto, 13, 18) = '$arkistotunnari'";
+						$vchkres = pupe_query($query);
+
+						if (mysql_num_rows($vchkres) > 0) {
+							$vchkrow = mysql_fetch_assoc($vchkres);
+
+							echo "<font class='error'>VIRHE: Tiliotetapahtuma arkitointitunnuksella: '$arkistotunnari' löytyy jo järjestelmästä (Tili: $tilino / Pvm: $vchkrow[alku])!</font><br>";
+
+							$xtyyppi=0;
+							$virhe++;
+						}
+					}
+				}
+
+				// Tsekataan LMP-aineiston duplikaatit ja tsekataan ettei kirjata suljetuille kausille
+				if ($xtyyppi == 2 and substr($tietue, 0, 3) == "T10") {
+					// VVKKPP
+					$taso = substr($tietue, 187, 1);
+					$tsekpvm = substr($tietue, 42, 6);
+
+					if ($taso == '0') $turvapvm = $tsekpvm; // Osuuspankki ei lähetä päiväystä kuin täällä
+					if ($pvm == '000000') $tsekpvm = $turvapvm;
+
+					if ($tsekpvm < $oresalku or $tsekpvm > $oresloppu) {
+						echo "<font class='error'>VIRHE: Aineistossa on tapahtuma ($tsekpvm) suljetulle kaudelle!</font><br>";
+
+						$xtyyppi=0;
+						$virhe++;
+					}
+				}
+
+				// Tsekataan, ettei mene duplikaattiviitesuortiuksia ja tsekataan ettei kirjata suljetuille kausille
+				if ($xtyyppi == 3 and substr($tietue, 0, 1) == "3") {
+
+					// VVKKPP
+					$tsekpvm = (int) "20".substr($tietue, 15, 6);
+
+					if ($tsekpvm < $myrealku or $tsekpvm > $myreloppu) {
+						echo "<font class='error'>VIRHE: Aineistossa on viitesuoritus ($tsekpvm) suljetulle kaudelle!</font><br>";
+
+						$xtyyppi=0;
+						$virhe++;
+					}
+
+					$arkistotunnari = substr($tietue, 27, 16);
+
+					if ((!is_numeric($arkistotunnari) and trim($arkistotunnari) != "") or (is_numeric($arkistotunnari) and (int) $arkistotunnari != 0)) {
+						// Katsotaan löytyykö tällä tunnuksella suoritus
+						$query = "	SELECT alku
+									FROM tiliotedata
+									WHERE yhtio	= '$yritirow[yhtio]'
+									and tilino 	= '$tilino'
+									and tyyppi 	= $xtyyppi
+									and tieto	= '$tietue'
+									and substring(tieto, 28, 16) = '$arkistotunnari'";
+						$vchkres = pupe_query($query);
+
+						if (mysql_num_rows($vchkres) > 0) {
+							$vchkrow = mysql_fetch_assoc($vchkres);
+
+							echo "<font class='error'>VIRHE: Viitesuoritus arkitointitunnuksella: '$arkistotunnari' löytyy jo järjestelmästä (Tili: $tilino / Pvm: $vchkrow[alku])!</font><br>";
+
+							$xtyyppi=0;
+							$virhe++;
+						}
+					}
+				}
+
+>>>>>>> bb7562b9f0b31906cb4e8d4462e8bca3b53aba33
 				if ($xtyyppi > 0 and $xtyyppi <= 3) {
 					// Kirjoitetaan tiedosto kantaan
 					$query = "INSERT into tiliotedata (yhtio, aineisto, tilino, alku, loppu, tyyppi, tieto) values ('$yritirow[yhtio]', '$aineistorow[aineisto]', '$tilino', '$alkupvm', '$loppupvm', '$xtyyppi', '$tietue')";

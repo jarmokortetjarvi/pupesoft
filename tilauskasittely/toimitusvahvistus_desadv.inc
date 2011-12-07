@@ -59,6 +59,26 @@
 			$error 			= '';
 			$x 				= 0; // yhteensä rivejä koko filessä
 
+<<<<<<< HEAD
+=======
+			if ($tulostauna != "") {
+				$kuljetustunnus = "PS".sprintf("%012.12s",$desadv_laskurow["laskutunnus"]); // tämä voi olla yhteensä max 14 merkkiäpitkä stringjono
+
+				// ED2 ja UNA kehykset.
+				// NRQ:0 = Ei CON kuittauspyyntöä, NRQ:1 = CON kuittauspyyntö
+				$desadv_message  = "'''ED2''':{$desadv_laskurow["asiakasovttunnus"]}:OVT':{$desadv_laskurow["yhtio_ovttunnus"]}:OVT'{$kuljetustunnus}'1'STX:EDIFACT'TYP:EDI'NRQ:0'''";
+				$desadv_message .= "\nUNA:+.? '";
+
+				// Valmistelupäiväys ja valmisteluaika on now(), jollei parempaa tietoa tule.
+				$valpvm = date("ymd");
+				$valaika = date("Hi");
+				$lahtunniste = $valpvm.$valaika.$rajaus;
+
+				// UNB ja UNOC kehys
+				// Ton DESADVD00A perässä on 4 plusmerkkiä, mikäli sinne viimeiseksi merkiksi laitetaan ennen hipsua 1 niin se on testisanoma
+				$desadv_message .= "UNB+UNOC:1+{$desadv_laskurow["yhtio_ovttunnus"]}:30+{$desadv_laskurow["asiakasovttunnus"]}:30+{$valpvm}:{$valaika}+{$lahtunniste}++DESADVD00A++++'";
+			}
+>>>>>>> bb7562b9f0b31906cb4e8d4462e8bca3b53aba33
 			// UNH - message header
 			$desadv_message .= "UNH+$desadv_laskurow[laskutunnus]+DESADV:D:00A:UN'";
 			$x++;
@@ -272,6 +292,7 @@
 						JOIN tuote ON (tuote.yhtio = tilausrivi.yhtio AND tuote.tuoteno = tilausrivi.tuoteno)
 						WHERE tilausrivi.yhtio = '$kukarow[yhtio]'
  						AND tilausrivi.otunnus = '$desadv_laskurow[laskutunnus]'
+						AND tilausrivi.tyyppi != 'D'
 						GROUP BY tuote.eankoodi, tilausrivi.tuoteno, tilausrivi.nimitys, tilausrivi.tilaajanrivinro";
 			$tuotteet_res = mysql_query($query) or pupe_error($query);
 

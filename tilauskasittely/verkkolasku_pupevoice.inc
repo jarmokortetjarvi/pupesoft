@@ -31,6 +31,37 @@ if (!function_exists('pupevoice_otsik')) {
 		fputs($tootxml, "</CHN>\n");
 		fputs($tootxml, "<SellerPartyInformation>\n");
 
+<<<<<<< HEAD
+=======
+		// yhtiötiedot
+		$y_tiedot_ok	= FALSE;
+		$y_nimi 		= $lasrow["yhtio_nimi"];
+		$y_osoite 		= $lasrow["yhtio_osoite"];
+		$y_postino	 	= $lasrow["yhtio_postino"];
+		$y_postitp	 	= $lasrow["yhtio_postitp"];
+		$y_maa 			= $lasrow["yhtio_maa"];
+		$y_kotipaikka	= $lasrow["yhtio_kotipaikka"];
+		$y_vatnumero	= $lasrow["yhtio_ovttunnus"]; # Huom tätä ei tule muuttaa, Itella tunnustaa lähettäjän tästä kentästä.
+		$y_iban 		= $yhtiorow['pankkiiban1'];
+		$y_swift 		= $yhtiorow['pankkiswift1'];
+
+		if ((int) $lasrow["yhtio_toimipaikka"] != 0) {
+			// haetaan toimipaikan tiedot
+			$alhqur = "SELECT puhelin, fax, email, www from yhtion_toimipaikat where yhtio='$lasrow[yhtio]' and tunnus='$lasrow[yhtio_toimipaikka]'";
+			$alhire = mysql_query($alhqur) or pupe_error($alhqur);
+
+			if (mysql_num_rows($alhire) == 1) {
+				$alhiro = mysql_fetch_assoc($alhire);
+
+				$y_tiedot_ok	= TRUE;
+				$y_puhelin		= $alhiro['puhelin'];
+				$y_fax			= $alhiro['fax'];
+				$y_email		= $alhiro['email'];
+				$y_www			= $alhiro['www'];
+			}
+		}
+
+>>>>>>> bb7562b9f0b31906cb4e8d4462e8bca3b53aba33
 		// jos meillä on lasku menossa ulkomaille ja se laskutetaan eri ovttunnuksella
 		if ($lasrow["yhtio_ovttunnus"] != "" and $lasrow["yhtio_ovttunnus"] != $yhtiorow["ovttunnus"]) {
 

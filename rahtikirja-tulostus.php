@@ -158,7 +158,7 @@
 		}
 		elseif ($jv == 'vainvak') {
 			if (!isset($nayta_pdf)) echo t("Vain VAK").". ";
-			$vainvakilliset = " JOIN tilausrivi ON (tilausrivi.yhtio = lasku.yhtio and tilausrivi.otunnus = lasku.tunnus)
+			$vainvakilliset = " JOIN tilausrivi ON (tilausrivi.yhtio = lasku.yhtio and tilausrivi.otunnus = lasku.tunnus AND tilausrivi.tyyppi != 'D')
 								JOIN tuote ON (tuote.yhtio=tilausrivi.yhtio and tuote.tuoteno=tilausrivi.tuoteno and tuote.vakkoodi not in ('','0')) ";
 		}
 		else {
@@ -561,6 +561,12 @@
 
 				// tulostetaan toimitustavan määrittelemä rahtikirja
 				if (@include("tilauskasittely/$toitarow[rahtikirja]")) {
+<<<<<<< HEAD
+=======
+
+					// Otetaan talteen tässä $rahtikirjanro talteen
+					$rahtikirjanro_alkuperainen = $rahtikirjanro;
+>>>>>>> bb7562b9f0b31906cb4e8d4462e8bca3b53aba33
 
 					if ($tulosta_vak_yleisrahtikirja != '') {
 						require("tilauskasittely/rahtikirja_pdf.inc");
@@ -569,6 +575,12 @@
 					if ($toitarow['erittely'] != '') {
 						require("tilauskasittely/rahtikirja_erittely_pdf.inc");
 					}
+<<<<<<< HEAD
+=======
+
+					// palautetaan alkuperäinen $rahtikirjanro takaisin
+					$rahtikirjanro = $rahtikirjanro_alkuperainen;
+>>>>>>> bb7562b9f0b31906cb4e8d4462e8bca3b53aba33
 				}
 				else {
 					if (!isset($nayta_pdf)) echo "<li><font class='error'>".t("VIRHE: Rahtikirja-tiedostoa")." 'tilauskasittely/$toitarow[rahtikirja]' ".t("ei löydy")."!</font>";
@@ -592,6 +604,17 @@
 				}
 
 				if ($rakir_row['toimitusvahvistus'] != '') {
+<<<<<<< HEAD
+=======
+
+					$tulostauna		= "";
+
+					if ($rakir_row["toimitusvahvistus"] == "toimitusvahvistus_desadv_una.inc") {
+						$tulostauna = "KYLLA";
+						$rakir_row["toimitusvahvistus"] = "toimitusvahvistus_desadv.inc";
+					}
+
+>>>>>>> bb7562b9f0b31906cb4e8d4462e8bca3b53aba33
 					if (file_exists("tilauskasittely/$rakir_row[toimitusvahvistus]")) {
 						require("tilauskasittely/$rakir_row[toimitusvahvistus]");
 					}
