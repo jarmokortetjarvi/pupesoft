@@ -2300,10 +2300,18 @@
 				<td class='back'>".t("(Toimii vain jos ajat raporttia tilauksista)")."</td>
 				</tr>
 				<tr>
+<<<<<<< HEAD
 				<th>".t("Listaa myyjittäin")."</th>
 				<td><input type='text' name='jarjestys[160]' size='2' value='$jarjestys[160]'></td>
 				<td><input type='checkbox' name='ruksit[160]' value='myyja' $ruk160chk></td>
 				<td><input type='text' name='rajaus[160]' value='$rajaus[160]'></td>
+=======
+				<th>",t("Listaa myyjittäin"),"</th>
+				<td><input type='text' name='jarjestys[160]' size='2' value='{$jarjestys[160]}'></td>
+				<td><input type='checkbox' name='ruksit[160]' value='myyja' {$ruk160chk}></td>
+				<td><input type='text' name='rajaus[160]' value='{$rajaus[160]}'></td>
+				<td class='back'>",t("(Toimii vain jos ajat raporttia tilauksista)"),"</td>
+>>>>>>> ed5fd7b4e87a4cdc2c94a2f23b8a81fa5fadecb6
 				</tr>
 				<tr>
 				<th>".t("Listaa konsernittain")."</th>
